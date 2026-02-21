@@ -1,0 +1,15 @@
+==> Authentication
+    1. => register (1. user ka data save krna. 2. token user ko dena)
+    2. => login
+    3. => logout (token blacklisting)
+    4. => [OTP based registration]
+
+==> post
+    1. => create
+    2. => can see the feed
+    3. => like posts (collection types)
+    4. => save post
+
+==> users
+    1. => followers
+    2. => following
