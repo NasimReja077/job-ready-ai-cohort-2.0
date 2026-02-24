@@ -1,25 +1,34 @@
 const postModel = require("../models/post.model");
 const ImageKit = require("@imagekit/nodejs")
+// import ImageKit from '@imagekit/nodejs';
 const { toFile } = require("@imagekit/nodejs")
 const jwt = require("jsonwebtoken")
 const likeModel = require("../models/like.model")
 
 const imagekit = new ImageKit({
-     privateKey: process.env.imagekit_PrivateKey
+    publicKey: process.env.IMAGEKIT_PUBLIC_KEY, 
+    privateKey: process.env.IMAGEKIT_PRIVATE_KEY,          
+    urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT
 })
 
 async function createPostController(req, res) {
+
+    if (!req.file) {
+        return res.status(400).json({ message: "No image file provided" });
+    }
     
-    const file = await imagekit.upload({
-     file: await toFile(Buffer.from (req.file.buffer), 'file'),
-     fileName: "Tests-Files",
-     folder: "cohort-2.0-instaClone-posts"
+    const uploadResponse = await imagekit.files.upload({
+     file: req.file.buffer,
+     fileName: req.file.originalname || `post-${Date.now()}.jpg`,
+     folder: "/cohort-2.0-instaClone-posts", 
+     useUniqueFileName: true,                     // optional: auto-rename if duplicate
+    // tags: ["instaClone", "userPost"]
     })
 
     const post = await postModel.create({
-        caption: req.body.caption,
-        imgUrl: file.url,
-        user: decoded.id
+        caption: req.body.caption || "",
+        imgUrl: uploadResponse.url,
+        user: req.user.id
     })
 
     res.status(201).json({
@@ -100,9 +109,31 @@ async function likePostController(req, res) {
 
 }
 
+async function getFeedController(req, res) {
+    const user = req.user
+
+    const posts = await Promise.all((await postModel.find().populate("user").lean()).map(async (post) => {
+
+        const isLiked = await likeModel.findOne({
+            user: user.username,
+            post: post._id
+        })
+
+        post.isLiked = !!(isLiked)
+
+        return post
+    }))
+
+    res.status(200).json({
+        message: "Feed fetched successfully.",
+        posts
+    })
+}
+
 module.exports = {
     createPostController,
     getPostController,
     getPostDetailsController,
-    likePostController
+    likePostController,
+    getFeedController
 }
