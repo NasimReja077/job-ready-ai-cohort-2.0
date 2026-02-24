@@ -13,7 +13,8 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [ true, "Password is required" ]
+        required: [ true, "Password is required" ],
+        select: false // to not select the password field by default when fetching the user from the database.
     },
     bio: String,
     profileImage: {
