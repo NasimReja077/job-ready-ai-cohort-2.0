@@ -60,7 +60,7 @@ async function loginController(req, res) {
           { username: username },
           { email: email }
      ]
-    })
+    }).select("+password") // to select the password field which is not selected by default in the user model.
 
     if (!user){
      return res.status(404).json({
