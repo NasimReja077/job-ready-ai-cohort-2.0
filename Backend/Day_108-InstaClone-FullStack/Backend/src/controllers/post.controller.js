@@ -1,40 +1,42 @@
 const postModel = require("../models/post.model");
-const ImageKit = require("@imagekit/nodejs")
-// import ImageKit from '@imagekit/nodejs';
-const { toFile } = require("@imagekit/nodejs")
+const ImageKit = require("@imagekit/nodejs").default;
+const { toFile } = require("@imagekit/nodejs");
 const jwt = require("jsonwebtoken")
 const likeModel = require("../models/like.model")
 
-const imagekit = new ImageKit({
-    publicKey: process.env.IMAGEKIT_PUBLIC_KEY, 
-    privateKey: process.env.IMAGEKIT_PRIVATE_KEY,          
-    urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT
-})
+const client = new ImageKit({
+  privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+});
 
 async function createPostController(req, res) {
-
+  try {
     if (!req.file) {
-        return res.status(400).json({ message: "No image file provided" });
+      return res.status(400).json({ message: "No image file provided" });
     }
-    
-    const uploadResponse = await imagekit.files.upload({
-     file: req.file.buffer,
-     fileName: req.file.originalname || `post-${Date.now()}.jpg`,
-     folder: "/cohort-2.0-instaClone-posts", 
-     useUniqueFileName: true,                     // optional: auto-rename if duplicate
-    // tags: ["instaClone", "userPost"]
-    })
+
+    const uploadResponse = await client.files.upload({
+        file: await toFile(req.file.buffer, req.file.originalname),
+        fileName: req.file.originalname,
+        folder: "cohort20_instaclone_posts",
+    });
 
     const post = await postModel.create({
-        caption: req.body.caption || "",
-        imgUrl: uploadResponse.url,
-        user: req.user.id
-    })
+      caption: req.body.caption || "",
+      imgUrl: uploadResponse.url,
+      user: req.user.id,
+    });
 
     res.status(201).json({
-        message: "Post created successfully.",
-        post
-    })
+      message: "Post created successfully.",
+      post,
+    });
+  } catch (error) {
+    console.log("UPLOAD ERROR:", error);
+    res.status(500).json({
+      message: "Something went wrong while uploading post.",
+      error: error.message,
+    });
+  }
 }
 
 async function getPostController(req, res) {
