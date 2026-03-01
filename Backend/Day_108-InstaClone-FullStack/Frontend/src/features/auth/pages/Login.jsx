@@ -13,8 +13,13 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await handleLogin(username, password);
-    navigate("/");
+    
+    try {
+      await handleLogin(username, password);
+      navigate("/");
+    } catch (err) {
+      alert("Login failed");
+    }
   };
 
   if (loading) {
@@ -32,9 +37,8 @@ const Login = () => {
           <h1>Login</h1>
           <form onSubmit={handleSubmit}>
             <input
-              onInput={(e) => {
-                setUsername(e.target.value);
-              }}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               type="text"
               name="username"
               id="username"
