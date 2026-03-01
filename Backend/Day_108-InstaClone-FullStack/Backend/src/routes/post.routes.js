@@ -12,7 +12,7 @@ const identifyUser = require("../middleware/auth.middleware")
  * @access Private
  */
 
-postRouter.post("/", upload.single("upload-image"), identifyUser, postController.createPostController)
+postRouter.post("/", identifyUser, upload.single("image"), postController.createPostController)
 
 
 /**
