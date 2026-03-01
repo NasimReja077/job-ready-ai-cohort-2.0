@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react'
 import "../style/feed.scss"
 import Post from '../components/Post.jsx'
-import { usePost } from '../hook/usePost.js/index.js'
+import { usePost } from '../hook/usePost.js'
 
 const Feed = () => {
      const { feed, handleGetFeed, loading } = usePost()
 
-     useEffect(() => {
-          handleGetFeed()
-     }, [ handleGetFeed])
+    useEffect(() => {
+        handleGetFeed()
+    }, [])
 
      if(loading || !feed){
           return (
@@ -22,9 +22,13 @@ const Feed = () => {
         <main className='feed-page' >
             <div className="feed">
                 <div className="posts">
-                    {feed.map(post=>{
-                        return <Post user={post.user} post={post} />
-                    })}
+                    {feed.map(post => (
+                        <Post
+                        key={post._id}
+                        user={post.user}
+                        post={post}
+                        />
+                    ))}
                 </div>
             </div>
         </main>
