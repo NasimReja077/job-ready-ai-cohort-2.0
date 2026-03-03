@@ -21,8 +21,9 @@ const Feed = () => {
 
 
      return (
+        <>
+         <Nav/>
         <main className='feed-page' >
-            <Nav/>
             <div className="feed">
                 <div className="posts">
                     {feed.map(post => (
@@ -30,11 +31,14 @@ const Feed = () => {
                         key={post._id}
                         user={post.user}
                         post={post}
+                        handleLike={handleLike}
+                        handleUnLike={handleUnLike}
                         />
                     ))}
                 </div>
             </div>
         </main>
+        </>
     )
 }
 
