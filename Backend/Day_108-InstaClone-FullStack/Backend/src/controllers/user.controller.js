@@ -2,9 +2,9 @@ const followModel = require("../models/follow.model");
 const userModel = require("../models/user.model");
 
 
-async function followUserController(res, req) {
+async function followUserController(req, res) {
      // 
-     const followerUsername = req.user.followerUsername; // req.user.followerUsername , followerUsername is typically sored in req.user object,
+     const followerUsername = req.user.username; // req.user.followerUsername , followerUsername is typically sored in req.user object,
      const followeeUsername = req.params.username; // req.params.username is passed as a URL parameter,
 
 
@@ -43,7 +43,7 @@ async function followUserController(res, req) {
      })
 
      res.status(200).json({
-          messagee: `You are now following ${followeeUsername}`,
+          message: `You are now following ${followeeUsername}`,
           follow: followRecord
      })
 
@@ -51,7 +51,14 @@ async function followUserController(res, req) {
 
 async function unfollowUserController(req, res) {
      const followerUsername = req.user.username
-    const followeeUsername = req.params.username
+     const followeeUsername = req.params.username
+
+
+     if (followerUsername === followeeUsername) {
+        return res.status(400).json({
+            message: "You cannot unfollow yourself"
+        });
+    }
 
     const unfollowRecord = await followModel.findOneAndDelete({
           follower: followerUsername,
@@ -64,18 +71,18 @@ async function unfollowUserController(req, res) {
 //           })
 //     }
 
-    if (!isUserFollowing) {
+    if (!unfollowRecord) {
         return res.status(200).json({
             message: `You are not following ${followeeUsername}`
         })
     }
 
-    await followModel.findByIdAndDelete(isUserFollowing._id)
+//     await followModel.findByIdAndDelete({ _id: isUserFollowing._id });
     
 
     res.status(200).json({
           message: `You have unfollowed ${followeeUsername}`,
-          unfollow: isUserFollowing
+          unfollow: unfollowRecord
      })
 }
 
