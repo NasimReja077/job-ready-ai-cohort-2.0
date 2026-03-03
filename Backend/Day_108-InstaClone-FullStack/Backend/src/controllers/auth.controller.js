@@ -33,7 +33,7 @@ async function registerController(req, res) {
      })
 
      const token = jwt.sign(
-          {id: user._id},
+          {id: user._id, username: user.username},
           process.env.JWT_SECRET,
           { expiresIn: '1d' }
      )
@@ -41,7 +41,7 @@ async function registerController(req, res) {
      res.cookie("token",token)
 
      res.status(201).json({
-          message: "User registered successfully",
+          message: "User Registered successfully",
           user: {
                email: user.email,
                username: user.username,
@@ -68,9 +68,8 @@ async function loginController(req, res) {
      })
     }
 
-//     const hashedPassword = crypto.createHash("sha256").update(password).digest("hex")
-
-    //const isPasswordValid = hashedPassword === user.password
+     // const hashedPassword = crypto.createHash("sha256").update(password).digest("hex")
+    // const isPasswordValid = hashedPassword === user.password
 
     const isPasswordValid = await bcrypt.compare(password, user.password)
 
@@ -81,7 +80,7 @@ async function loginController(req, res) {
     }
 
     const token = jwt.sign(
-        { id: user._id },
+        { id: user._id, username: user.username },
         process.env.JWT_SECRET,
         { expiresIn: "1d" }
     )
@@ -90,7 +89,7 @@ async function loginController(req, res) {
 
     res.status(200)
         .json({
-            message: "User loggedIn successfully.",
+            message: "User LoggedIn SuccessFully.",
             user: {
                 username: user.username,
                 email: user.email,
