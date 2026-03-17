@@ -44,12 +44,30 @@ async function getSong(req, res) {
 
     const { mood } = req.query
 
-    const song = await songModel.findOne({
-        mood,
-    })
+    const song = await songModel.find({ mood }).lean();
+
+    // Option 2: If you want exactly ONE random song per mood (surprise/shuffle feature)
+    // const songs = await songModel.aggregate([
+    //     { $match: { mood } },
+    //     { $sample: { size: 1 } }
+    // ]);
+
+    // Option 3: Return 3–5 random songs (better for "recommended sad songs")
+    // const songs = await songModel.aggregate([
+    //     { $match: { mood } },
+    //     { $sample: { size: 5 } }
+    // ]);
+
+    // 
+    if (!song || song.length === 0) {
+        return res.status(404).json({
+            message: `No songs found for this mood "${mood}" `,
+        });
+    }
 
     res.status(200).json({
         message: "song fetched successfully.",
+        count: song.length,
         song,
     })
 
