@@ -479,3 +479,9 @@ Your 4-layer frontend architecture consists of:
 
 When each layer respects its boundary,
 your React app remains scalable and maintainable.
+
+
+UI- UI dikhann aur navigation handl(pages, component) 1 5
+HOOK => state and APIs manage krna[ hooks ]4
+STATE => data store [auth.contex.jex, posts.contex.jsx ]3
+API => Backend se communication krne ke le [ services/auth.api.js]2
