@@ -1,0 +1,266 @@
+Node.js v22.17.1
+PS C:\Users\User\Desktop\New folder\Sheryians_cohort_2.0\Backend\Day_123-Terminal_LLM_Tools> node index.js
+--- Chat Started (Type 'exit' to quit) ---
+You: Email transporter is ready to send emails
+hi
+[AI] Hello! How can I assist you today? 😊
+You: what is ai in 10 word
+[AI] Artificial intelligence is machines simulating human intelligence to perform tasks autonomously.
+You: can you creat a post in 5 line
+[AI] Certainly! Here’s a concise 5-line social media post for you:
+
+---
+**AI: The Future, Today!** 🤖✨
+
+From self-driving cars to personalized recommendations, artificial intelligence is transforming *everything*—faster than we imagined.
+
+It learns, adapts, and solves problems, making life smarter, safer, and more efficient.
+
+The question isn’t *if* AI will change the world—it’s *how soon*.
+
+What’s the coolest AI innovation you’ve seen? Drop it below! 👇🔥
+You: send an email to rejanasim611@gmail.com , subject is role of Ai in 2026 tech world, body:- compose body by youer self it contains the big steps taken by tech entrepreneur and also mention this email writh by AI agent
+
+
+
+You: can you creat a post in 5 line
+[AI] Certainly! Here’s a concise 5-line social media post for you:
+
+---
+**AI: The Future, Today!** 🤖✨
+
+From self-driving cars to personalized recommendations, artificial intelligence is transforming *everything*—faster than we imagined.
+
+It learns, adapts, and solves problems, making life smarter, safer, and more efficient.
+
+The question isn’t *if* AI will change the world—it’s *how soon*.
+
+What’s the coolest AI innovation you’ve seen? Drop it below! 👇🔥
+You: send an email to rejanasim611@gmail.com , subject is role of Ai in 2026 tech world, body:- compose body by youer self it contains the big steps taken by tech entrepreneur and also mention this email writh by AI agent
+
+
+
+You: can you creat a post in 5 line
+[AI] Certainly! Here’s a concise 5-line social media post for you:
+
+---
+**AI: The Future, Today!** 🤖✨
+
+From self-driving cars to personalized recommendations, artificial intelligence is transforming *everything*—faster than we imagined.
+
+It learns, adapts, and solves problems, making life smarter, safer, and more efficient.
+
+The question isn’t *if* AI will change the world—it’s *how soon*.
+
+What’s the coolest AI innovation you’ve seen? Drop it below! 👇🔥
+You: send an email to rejanasim611@gmail.com , subject is role of Ai in 2026 tech world, body:- compose body by youer self it contains the big steps taken by tech entrepreYou: can you creat a post in 5 line
+[AI] Certainly! Here’s a concise 5-line social media post for you:
+
+---
+**AI: The Future, Today!** 🤖✨
+
+From self-driving cars to personalized recommendations, artificial intelligence is transforming *everything*—faster than we imagined.
+
+You: can you creat a post in 5 line
+[AI] Certainly! Here’s a concise 5-line social media post for you:
+You: can you creat a post in 5 line
+[AI] Certainly! Here’s a concise 5-line social media post for you:
+You: can you creat a post in 5 line
+[AI] Certainly! Here’s a concise 5-line social media post for you:
+You: can you creat a post in 5 line
+[AI] Certainly! Here’s a concise 5-line social media post for you:
+
+---
+**AI: The Future, Today!** 🤖✨
+
+From self-driving cars to personalized recommendations, artificial intelligence is transforming *everything*—faster than we imagined.
+
+It learns, adapts, and solves problems, making life smarter, safer, and more efficient.
+
+You: can you creat a post in 5 line
+[AI] Certainly! Here’s a concise 5-line social media post for you:
+
+---
+**AI: The Future, Today!** 🤖✨
+
+From self-driving cars to personalized recommendations, artificial intelligence is transforming *everything*—faster than we imagined.
+
+You: can you creat a post in 5 line
+[AI] Certainly! Here’s a concise 5-line social media post for you:
+
+---
+**AI: The Future, Today!** 🤖✨
+
+You: can you creat a post in 5 line
+[AI] Certainly! Here’s a concise 5-line social media post for you:
+You: can you creat a post in 5 line
+[AI] Certainly! Here’s a concise 5-line social media post for you:
+
+---
+**AI: The Future, Today!** 🤖✨
+
+From self-driving cars to personalized recommendations, artificial intelligence is transforming *everything*—faster than we imagined.
+
+It learns, adapts, and solves problems, making life smarter, safer, and more efficient.
+
+The question isn’t *if* AI will change the world—it’s *how soon*.
+
+What’s the coolest AI innovation you’ve seen? Drop it below! 👇🔥
+You: send an email to rejanasim611@gmail.com , subject is role of Ai in 2026 tech world, body:- compose body by youer self it contains the big steps taken by tech entrepreneur and also mention this email writh by AI agent MISTRAL AI
+Email sent: {
+  accepted: [ 'rejanasim611@gmail.com' ],
+  rejected: [],
+  ehlo: [
+    'SIZE 35882577',
+    '8BITMIME',
+    'AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH',
+    'ENHANCEDSTATUSCODES',
+    'PIPELINING',
+    'CHUNKING',
+    'SMTPUTF8'
+  ],
+  envelopeTime: 811,
+  messageTime: 952,
+  messageSize: 2448,
+  response: '250 2.0.0 OK  1774103183 d9443c01a7336-2b083549f63sm53019755ad.30 - gsmtp',
+  envelope: { from: 'rejanasim611@gmail.com', to: [ 'rejanasim611@gmail.com' ] },
+  messageId: '<ed58f4fc-499f-9cd6-e8b5-7bcefdf623f8@gmail.com>'
+}
+[AI] Your email has been successfully sent to **rejanasim611@gmail.com** with the subject **"Role of AI in the 2026 Tech World"**. The content highlights key advancements 
+led by tech entrepreneurs and was composed by the AI agent **MISTRAL AI**.
+You:
+
+
+
+You: 
+
+    'ENHANCEDSTATUSCODES',
+    'PIPELINING',
+    'CHUNKING',
+    'SMTPUTF8'
+  ],
+  envelopeTime: 811,
+  messageTime: 952,
+  messageSize: 2448,
+  response: '250 2.0.0 OK  1774103183 d9443c01a7336-2b083549f63sm53019755ad.30 - gsmtp',
+  envelope: { from: 'rejanasim611@gmail.com', to: [ 'rejanasim611@gmail.com' ] },
+  messageId: '<ed58f4fc-499f-9cd6-e8b5-7bcefdf623f8@gmail.com>'
+}
+[AI] Your email has been successfully sent to **rejanasim611@gmail.com** with the subject **"Role of AI in the 2026 Tech World"**. The content highlights key advancements 
+led by tech entrepreneurs and was composed by the AI agent **MISTRAL AI**.
+You: 
+
+
+    'ENHANCEDSTATUSCODES',
+    'PIPELINING',
+    'CHUNKING',
+    'SMTPUTF8'
+  ],
+  envelopeTime: 811,
+  messageTime: 952,
+  messageSize: 2448,
+  response: '250 2.0.0 OK  1774103183 d9443c01a7336-2b083549f63sm53019755ad.30 - gsmtp',
+  envelope: { from: 'rejanasim611@gmail.com', to: [ 'rejanasim611@gmail.com' ] },
+  messageId: '<ed58f4fc-499f-9cd6-e8b5-7bcefdf623f8@gmail.com>'
+}
+[AI] Your email has been successfully sent to **rejanasim611@gmail.com** with the subject **"Role of AI in the 2026 Tech World"**. The content highlights key advancements 
+led by tech entrepreneurs and was composed by the AI agent **MISTRAL AI**.
+You:
+
+
+    'ENHANCEDSTATUSCODES',
+    'PIPELINING',
+    'CHUNKING',
+    'SMTPUTF8'
+  ],
+  envelopeTime: 811,
+  ],
+  envelopeTime: 811,
+  envelopeTime: 811,
+  messageTime: 952,
+  messageSize: 2448,
+  response: '250 2.0.0 OK  1774103183 d9443c01a7336-2b083549f63sm53019755ad.30 - gsmtp',
+  envelope: { from: 'rejanasim611@gmail.com', to: [ 'rejanasim611@gmail.com' ] },
+  messageId: '<ed58f4fc-499f-9cd6-e8b5-7bcefdf623f8@gmail.com>'
+}
+[AI] Your email has been successfully sent to **rejanasim611@gmail.com** with the subject **"Role of AI in the 2026 Tech World"**. The content highlights key advancements 
+led by tech entrepreneurs and was composed by the AI agent **MISTRAL AI**.
+You: send an email to rabiulbiswas10@gmail.com, subject is role of Ai Agents in 2026 tech world, body:- compose body by youer self it contains the big steps taken by tech 
+entrepreneur and also mention this email writh by AI agent MISTRAL AI (Nasim)
+Email sent: {
+  accepted: [ 'rabiulbiswas10@gmail.com' ],
+  rejected: [],
+  ehlo: [
+    'SIZE 35882577',
+    '8BITMIME',
+    'AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH',
+    'ENHANCEDSTATUSCODES',
+    'PIPELINING',
+    'CHUNKING',
+[AI] Your email has been successfully sent to **rejanasim611@gmail.com** with the subject **"Role of AI in the 2026 Tech World"**. The content highlights key advancements 
+led by tech entrepreneurs and was composed by the AI agent **MISTRAL AI**.
+You: send an email to rabiulbiswas10@gmail.com, subject is role of Ai Agents in 2026 tech world, body:- compose body by youer self it contains the big steps taken by tech 
+entrepreneur and also mention this email writh by AI agent MISTRAL AI (Nasim)
+Email sent: {
+  accepted: [ 'rabiulbiswas10@gmail.com' ],
+  rejected: [],
+  ehlo: [
+    'SIZE 35882577',
+    '8BITMIME',
+    'AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH',
+    'ENHANCEDSTATUSCODES',
+    'PIPELINING',
+    'CHUNKING',
+You: send an email to rabiulbiswas10@gmail.com, subject is role of Ai Agents in 2026 tech world, body:- compose body by youer self it contains the big steps taken by tech 
+entrepreneur and also mention this email writh by AI agent MISTRAL AI (Nasim)
+Email sent: {
+  accepted: [ 'rabiulbiswas10@gmail.com' ],
+  rejected: [],
+  ehlo: [
+    'SIZE 35882577',
+    '8BITMIME',
+    'AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH',
+    'ENHANCEDSTATUSCODES',
+    'PIPELINING',
+    'CHUNKING',
+  ehlo: [
+    'SIZE 35882577',
+    '8BITMIME',
+    'AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH',
+    'ENHANCEDSTATUSCODES',
+    'PIPELINING',
+    'CHUNKING',
+    'ENHANCEDSTATUSCODES',
+    'PIPELINING',
+    'CHUNKING',
+    'SMTPUTF8'
+  ],
+  envelopeTime: 795,
+    'SMTPUTF8'
+  ],
+  envelopeTime: 795,
+  messageTime: 987,
+  messageSize: 2140,
+  response: '250 2.0.0 OK  1774103682 d9443c01a7336-2b083516194sm52896515ad.4 - gsmtp',
+  envelope: {
+    from: 'rejanasim611@gmail.com',
+    to: [ 'rabiulbiswas10@gmail.com' ]
+  },
+  messageId: '<30220573-22e6-25ce-7ffd-90b8abc9a36f@gmail.com>'
+  messageSize: 2140,
+  response: '250 2.0.0 OK  1774103682 d9443c01a7336-2b083516194sm52896515ad.4 - gsmtp',
+  envelope: {
+    from: 'rejanasim611@gmail.com',
+    to: [ 'rabiulbiswas10@gmail.com' ]
+  },
+  messageId: '<30220573-22e6-25ce-7ffd-90b8abc9a36f@gmail.com>'
+    from: 'rejanasim611@gmail.com',
+    to: [ 'rabiulbiswas10@gmail.com' ]
+  },
+  messageId: '<30220573-22e6-25ce-7ffd-90b8abc9a36f@gmail.com>'
+  },
+  messageId: '<30220573-22e6-25ce-7ffd-90b8abc9a36f@gmail.com>'
+  messageId: '<30220573-22e6-25ce-7ffd-90b8abc9a36f@gmail.com>'
+}
+[AI] Your email has been successfully sent to **rabiulbiswas10@gmail.com** with the subject **"Role of AI Agents in the 2026 Tech World"**. The content highlights the transformative steps taken by tech entrepreneurs and was composed by the **AI Agent Mistral AI (Nasim)**.
+You: 
