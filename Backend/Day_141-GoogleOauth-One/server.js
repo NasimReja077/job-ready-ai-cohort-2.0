@@ -4,6 +4,7 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from "passport-google-oauth20"
 import morgan from 'morgan';
 
+
 config();
 
 const app = express();
@@ -12,7 +13,6 @@ app.use(morgan('dev'));
 app.get('/', (req, res) => {
     res.send('Hello World');
 })
-
 
 app.use(passport.initialize());
 
@@ -39,7 +39,6 @@ app.get('/auth/google/callback',
         res.send('Google authentication successful');
     }
 )
-
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
