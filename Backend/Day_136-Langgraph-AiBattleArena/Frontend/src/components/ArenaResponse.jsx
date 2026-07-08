@@ -4,12 +4,15 @@ import remarkGfm from 'remark-gfm';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
 
+// ArenaResponse component displays the solutions and judge recommendations in a structured format
 export default function ArenaResponse({ solution1, solution2, judge }) {
   useEffect(() => {
     hljs.highlightAll();
   }, [solution1, solution2]);
 
+
   return (
+    // Main container for the ArenaResponse component with styling for layout and spacing
     <div className="flex flex-col gap-8 my-8 px-4 w-full">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Solution 1 */}
