@@ -3,6 +3,7 @@ import z from "zod";
 import { mistralAIModel, cohereModel, geminiModel } from "./model.ai.js";
 import { createAgent, HumanMessage, providerStrategy } from "langchain";
 
+// Define the state schema for the graph
 const state = new StateSchema({
     problem: z.string().default(""),
     solution_1: z.string().default(""),
@@ -16,6 +17,7 @@ const state = new StateSchema({
 })
 
 
+// Define the solution node that generates solutions using MistralAI and Cohere models
 const solutionNode: GraphNode<typeof state> = async (state) => {
 
     const [mistralResponse, cohereResponse] = await Promise.all([
@@ -29,6 +31,7 @@ const solutionNode: GraphNode<typeof state> = async (state) => {
     }
 }
 
+// Define the judge node that evaluates the solutions and provides scores and reasoning
 const judgeNode: GraphNode<typeof state> = async (state) => {
     const { problem, solution_1, solution_2 } = state
 
@@ -72,6 +75,7 @@ const judgeNode: GraphNode<typeof state> = async (state) => {
 
 }
 
+// Compile the state graph with the defined nodes and edges
 const graph = new StateGraph(state)
     .addNode("solution", solutionNode)
     .addNode("judge_node", judgeNode)
