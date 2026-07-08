@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+import { connect } from 'mongoose';
 
 function connectDB(){
      
-     mongoose.connect(process.env.MONGO_URI)
+     connect(process.env.MONGO_URI)
      .then(() => {
           console.log("Database Connected Successfully✅")
      })
@@ -11,4 +11,4 @@ function connectDB(){
      })
 }
 
-module.exports = connectDB;
+export default connectDB;

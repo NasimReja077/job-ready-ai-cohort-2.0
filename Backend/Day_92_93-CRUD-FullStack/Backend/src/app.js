@@ -1,5 +1,7 @@
+// App is the entry point of our backend application
+
 const express = require('express')
-const noteModel = require("./models/notes.models");
+const noteModel = require("./models/notes.models").default;
 const cors = require("cors")
 const path = require("path")
 
