@@ -7,6 +7,7 @@ import morgan from 'morgan';
 
 config();
 
+// Initialize Express app
 const app = express();
 app.use(morgan('dev'));
 
@@ -14,6 +15,7 @@ app.get('/', (req, res) => {
     res.send('Hello World');
 })
 
+// Middleware to parse JSON requests
 app.use(passport.initialize());
 
 passport.use(new GoogleStrategy({
@@ -24,11 +26,12 @@ passport.use(new GoogleStrategy({
     return done(null, profile);
 }))
 
-
+// Route to initiate Google OAuth authentication
 app.get("/auth/google",
     passport.authenticate("google", { scope: [ "profile", "email" ] })
 )
 
+// Route to handle Google OAuth callback
 app.get('/auth/google/callback',
     passport.authenticate('google', {
         session: false,
