@@ -10,7 +10,7 @@ app.get("/health", (req, res) => {
 })
 
 app.post("/use-graph", async (req, res) => {
-     await useGraph("Write a factorial in java")
+     await useGraph("give short description of Langchain in 15 words")
 })
 
 export default app;
