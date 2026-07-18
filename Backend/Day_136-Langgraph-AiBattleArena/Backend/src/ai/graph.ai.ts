@@ -4,6 +4,7 @@ import { mistralAIModel, cohereModel, geminiModel } from "./model.ai.js";
 import { createAgent, HumanMessage, providerStrategy } from "langchain";
 
 // Define the state schema for the graph
+
 const state = new StateSchema({
     problem: z.string().default(""),
     solution_1: z.string().default(""),
@@ -11,7 +12,7 @@ const state = new StateSchema({
     judge: z.object({
         solution_1_score: z.number().default(0),
         solution_2_score: z.number().default(0),
-        solution_1_reasoning: z.string().default(""),
+        solution_1_reasoning: z.string().default(""),// Fidback
         solution_2_reasoning: z.string().default(""),
     })
 })
