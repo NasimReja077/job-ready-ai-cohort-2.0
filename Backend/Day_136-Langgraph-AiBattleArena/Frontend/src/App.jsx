@@ -1,4 +1,3 @@
-import './App.css';
 import ChatInterface from './components/ChatInterface.jsx';
 
 function App() {
