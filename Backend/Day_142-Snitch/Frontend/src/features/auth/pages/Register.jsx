@@ -80,8 +80,8 @@ const Register = () => {
                             <label className="text-sm text-[#d0c6ab] mb-2 font-medium">Full Name</label>
                             <input
                                 type="text"
-                                name="fullName"
-                                value={formData.fullName}
+                                name="fullname"
+                                value={formData.fullname}
                                 onChange={handleChange}
                                 required
                                 className="bg-[#1c1b1b] lg:bg-[#0e0e0e] text-white border-b-2 border-[#4d4732] focus:border-[#FFD700] outline-none px-4 py-3 transition-colors duration-300 focus:bg-[#201f1f] lg:focus:bg-[#131313]"
@@ -94,8 +94,8 @@ const Register = () => {
                             <label className="text-sm text-[#d0c6ab] mb-2 font-medium">Contact Number</label>
                             <input
                                 type="tel"
-                                name="contactNumber"
-                                value={formData.contactNumber}
+                                name="contact"
+                                value={formData.contact}
                                 onChange={handleChange}
                                 required
                                 className="bg-[#1c1b1b] lg:bg-[#0e0e0e] text-white border-b-2 border-[#4d4732] focus:border-[#FFD700] outline-none px-4 py-3 transition-colors duration-300 focus:bg-[#201f1f] lg:focus:bg-[#131313]"
