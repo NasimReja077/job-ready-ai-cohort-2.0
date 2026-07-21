@@ -4,16 +4,18 @@ import bcrypt from "bcryptjs";
 const userSchema = new mongoose.Schema({
      email: {
           type: String,
-          require: true,
+          required: true,
           unique: true
      },
      contact:{
           type: String,
-          required: true
+          required: false
      },
      password:{
           type: String,
-          required: true
+          required: function () {
+               return !this.googleID;
+          }
      },
      fullname: {
           type: String,
@@ -24,6 +26,9 @@ const userSchema = new mongoose.Schema({
           enum: [ "buyer", "seller"],
           default: "buyer"
      },
+     googleID: {
+          type: String,
+     }
 
 })
 
