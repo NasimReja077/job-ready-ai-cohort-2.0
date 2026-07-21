@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from "../hook/useAuth"
 import { useNavigate } from 'react-router';
+import ContinueWithGoogle from "../components/ContinueWithGoogle.jsx";
 
 const Register = () => {
 
@@ -8,8 +9,8 @@ const Register = () => {
     const navigate = useNavigate()
 
     const [ formData, setFormData ] = useState({
-        fullName: '',
-        contactNumber: '',
+        fullname: '',
+        contact: '',
         email: '',
         password: '',
         isSeller: false
@@ -27,10 +28,10 @@ const Register = () => {
         e.preventDefault();
         await handleRegister({
             email: formData.email,
-            contact: formData.contactNumber,
+            contact: formData.contact,
             password: formData.password,
-            isSeller: formData.isSeller,
-            fullname: formData.fullName
+            fullname: formData.fullname,
+            isSeller: formData.isSeller
         })
         navigate("/")
     };
@@ -98,7 +99,7 @@ const Register = () => {
                                 onChange={handleChange}
                                 required
                                 className="bg-[#1c1b1b] lg:bg-[#0e0e0e] text-white border-b-2 border-[#4d4732] focus:border-[#FFD700] outline-none px-4 py-3 transition-colors duration-300 focus:bg-[#201f1f] lg:focus:bg-[#131313]"
-                                placeholder="+1 (555) 000-0000"
+                                placeholder="1234567890"
                             />
                         </div>
 
@@ -148,8 +149,8 @@ const Register = () => {
                             <label htmlFor="isSeller" className="text-sm text-[#e5e2e1] group-hover:text-[#FFD700] cursor-pointer select-none transition-colors duration-300">Register as Seller</label>
                         </div>
 
-                        <a href="/api/auth/google"
-                            className="text-sm underline text-[#e5e2e1] group-hover:text-[#FFD700] cursor-pointer select-none transition-colors duration-300">Continue with Google</a>
+                        {/* <a href="/api/auth/google"
+                            className="text-sm underline text-[#e5e2e1] group-hover:text-[#FFD700] cursor-pointer select-none transition-colors duration-300">Continue with Google</a> */}
 
                         {/* Submit Button */}
                         <button
@@ -158,6 +159,8 @@ const Register = () => {
                         >
                             Sign Up
                         </button>
+
+                        <ContinueWithGoogle/>
 
                         <div className="text-center mt-6">
                             <a href="/login" className="text-sm text-[#999077] hover:text-[#FFD700] transition-colors border-b border-transparent hover:border-[#FFD700] py-0.5">
