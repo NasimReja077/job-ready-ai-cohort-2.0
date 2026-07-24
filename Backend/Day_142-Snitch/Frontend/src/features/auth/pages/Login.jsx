@@ -49,16 +49,13 @@ const Login = () => {
           <img
             src="/snitch_editorial.png"
             alt="Snitch Fashion Editorial"
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ filter: "sepia(20%) brightness(0.92)" }}
+            className="absolute inset-0 w-full h-full object-cover object-top"
+                        style={{ filter: 'brightness(0.97)' }}
           />
           {/* Subtle warm overlay */}
           <div
             className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(to top, rgba(27,24,20,0.45) 0%, rgba(27,24,20,0.05) 50%, transparent 100%)",
-            }}
+            style={{ background: 'linear-gradient(to top, rgba(27,24,20,0.62) 0%, rgba(27,24,20,0.08) 45%, transparent 100%)' }}
           />
           <div className="absolute inset-0 p-14 flex flex-col justify-between z-10">
             {/* Brand */}
