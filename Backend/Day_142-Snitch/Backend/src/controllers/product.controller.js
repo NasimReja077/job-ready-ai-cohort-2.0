@@ -69,3 +69,5 @@ export async function getProductDetails(req, res) {
         success: true,
         product
     })
+
+}
