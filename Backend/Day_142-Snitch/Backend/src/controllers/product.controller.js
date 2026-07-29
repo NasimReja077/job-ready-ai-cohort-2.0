@@ -1,33 +1,54 @@
 import productModel from "../models/product.model.js";
 import { uploadFile } from "../services/storage.service.js";
 
-export async function createProduct(req, res){
-     const { title, description, priceAmount, priceCurrency } = req.body;
-     const seller = req.user; 
+export async function createProduct(req, res) {
+     try {
+          const { title, description, priceAmount, priceCurrency = "INR" } = req.body;
+          const seller = req.user;
 
-     const images = await Promise.all(req.files.map(async (file) => {
-          return await uploadFile({
-               buffer: file.buffer,
-               fileName: file.originalname
-          })
-     }))
+          if (!req.files || req.files.length === 0) {
+               return res.status(400).json({ 
+                    message: "At least one image is required", 
+                    success: false 
+               });
+          }
 
-     const product = await productModel.create({
-          title,
-          description,
-          price: {
-               amount: priceAmount,
-               currency: priceCurrency || "INR"
-          },
-          images,
-          seller: seller._id
-     })
+          // Upload all images
+          const images = await Promise.all(
+               req.files.map(async (file) => {
+                    return await uploadFile({
+                         buffer: file.buffer,
+                         fileName: file.originalname,
+                         mimeType: file.mimetype
+                    });
+               })
+          );
 
-     res.status(201).json({
-          message: "Product Created SuccessFull",
-          success: true,
-          product
-     })
+          const product = await productModel.create({
+               title,
+               description,
+               price: { 
+                    amount: Number(priceAmount), 
+                    currency: priceCurrency 
+               },
+               images,
+               seller: seller._id
+          });
+
+          res.status(201).json({ 
+               message: "Product Created Successfully", 
+               success: true, 
+               product 
+          });
+
+     } catch (err) {
+          console.error("createProduct failed:", err);
+          res.status(500).json({
+               message: "Failed to create product",
+               success: false,
+               error: err.message
+          });
+     }
 }
 
 export async function getSellerProducts(req, res) {
