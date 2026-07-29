@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
 
 const Protected = ({ children, role = "buyer" }) =>{
-     cont user = useSelector(state => state.auth.user)
+     const user = useSelector(state => state.auth.user)
      const loading = useSelector(state => state.auth.loading)
 
      if (loading){
