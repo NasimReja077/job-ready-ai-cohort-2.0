@@ -19,7 +19,7 @@ export async function createProduct(req, res){
                amount: priceAmount,
                currency: priceCurrency || "INR"
           },
-          image,
+          images,
           seller: seller._id
      })
 
@@ -31,7 +31,11 @@ export async function createProduct(req, res){
 }
 
 export async function getSellerProducts(req, res) {
-     const seller = res.user;
+     const seller = req.user;
+
+     if (!seller) {
+          return res.status(401).json({ message: "Unauthorized" });
+     }
 
      const products = await productModel.find({ seller: seller._id });
 

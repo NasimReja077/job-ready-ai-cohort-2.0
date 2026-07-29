@@ -25,14 +25,19 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await handleRegister({
-      email: formData.email,
-      contact: formData.contact,
-      password: formData.password,
-      fullname: formData.fullname,
-      isSeller: formData.isSeller,
-    });
-    navigate("/");
+
+    try {
+      await handleRegister({
+        email: formData.email,
+        contact: formData.contact,
+        password: formData.password,
+        fullname: formData.fullname,
+        isSeller: formData.isSeller,
+      });
+      navigate("/");
+    } catch (error) {
+      console.error("Registration failed:", error?.response?.data || error.message);
+    }
   };
 
   const inputStyle = {
@@ -161,8 +166,8 @@ const Register = () => {
                 <input
                   id="reg-fullName"
                   type="text"
-                  name="fullName"
-                  value={formData.fullName}
+                  name="fullname"
+                  value={formData.fullname}
                   onChange={handleChange}
                   required
                   placeholder="e.g. John Doe"
@@ -185,8 +190,8 @@ const Register = () => {
                 <input
                   id="reg-contact"
                   type="tel"
-                  name="contactNumber"
-                  value={formData.contactNumber}
+                  name="contact"
+                  value={formData.contact}
                   onChange={handleChange}
                   required
                   placeholder="+91 98765 43210"

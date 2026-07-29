@@ -23,7 +23,7 @@ export const authenticateUser = async (req, res, next) => {
           next()
 
      } catch (error) {
-          console.log(err)
+          console.log(erroror)
           return res.status(401).json({ message: "Unauthorized" })
      }
 }
