@@ -16,6 +16,17 @@ function normalizeImage(image) {
      };
 }
 
+function normalizeVariant(variant) {
+     if (!variant || typeof variant !== "object") return variant;
+
+     return {
+          ...variant,
+          images: Array.isArray(variant.images)
+               ? variant.images.map(normalizeImage)
+               : [],
+     };
+}
+
 function normalizeProduct(product) {
      if (!product || typeof product !== "object") return product;
 
@@ -23,6 +34,9 @@ function normalizeProduct(product) {
           ...product,
           images: Array.isArray(product.images)
                ? product.images.map(normalizeImage)
+               : [],
+          variants: Array.isArray(product.variants)
+               ? product.variants.map(normalizeVariant)
                : [],
      };
 }
@@ -62,4 +76,21 @@ export async function getProductById(productId){
           ...response.data,
           product: normalizeProduct(response.data?.product),
      }
+}
+
+export async function addProductVariant(productId, newProductVariant) {
+     console.log(newProductVariant)
+
+     const formData = new FormData()
+
+     newProductVariant.images.forEach((image) => {
+          formData.append('images', image.file)
+     })
+
+     formData.append("stock", newProductVariant.stock)
+     formData.append("priceAmount", newProductVariant.price)
+     formData.append("attributes", JSON.stringify(newProductVariant.attributes))
+
+     const response = await productApiInstance.post(`/${productId}/variants`, formData)
+     return response.data
 }
