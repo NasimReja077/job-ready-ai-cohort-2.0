@@ -18,9 +18,10 @@ export async function uploadFile({ buffer, fileName, mimeType, folder = "snitch"
                useUniqueFileName: true,     // Recommended
           });
 
-          // Return format that matches your Product schema
+          // Return a shape that works for both top-level product images and variant images
           return {
-               URL: result.url
+               URL: result.url,
+               url: result.url
           };
 
      } catch (err) {
