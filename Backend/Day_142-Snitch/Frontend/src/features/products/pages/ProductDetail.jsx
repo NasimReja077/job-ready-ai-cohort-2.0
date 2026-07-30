@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router';
 import { useProduct } from '../hooks/useProduct.js';
+import { useCart } from '../../cart/hook/useCart.js';
 
 const ProductDetail = () => {
      const { productId } = useParams();
@@ -9,6 +10,7 @@ const ProductDetail = () => {
      const [ selectedAttributes, setSelectedAttributes ] = useState({});
      const navigate = useNavigate();
      const { handleGetProductById } = useProduct();
+     const { handleAddItem } = useCart();
 
      async function fetchProductDetails() {
         try {
@@ -26,7 +28,7 @@ const ProductDetail = () => {
 
     useEffect(() => {
         if (product?.variants?.length > 0){
-            setSelectedAttributes(product.variants[0].attributes || {});
+            setSelectedAttributes(product.variants[ 0 ].attributes || {});
         }
     }, [ product ])
 
@@ -36,49 +38,52 @@ const ProductDetail = () => {
             if (!v.attributes) return false;
             const vKeys = Object.keys(v.attributes);
             const sKeys = Object.keys(selectedAttributes);
-            const isMatch = vKeys.every(k => v.attributes[k] === selectedAttributes[k]);
+            const isMatch = vKeys.every(k => v.attributes[ k ] === selectedAttributes[ k ]);
             // If they don't have exactly the same keys, they shouldn't perfectly match, 
             // but we might only care about matching what's available.
             return vKeys.length === sKeys.length && isMatch;
         });
-    }, [product, selectedAttributes]);
+
+    }, [ product, selectedAttributes ]);
+
+    console.log({ product, activeVariant })
 
     const availableAttributes = useMemo(() => {
         if (!product?.variants) return {};
         const attrs = {};
         product.variants.forEach(variant => {
             if (variant.attributes) {
-                Object.entries(variant.attributes).forEach(([key, value]) => {
-                    if (!attrs[key]) attrs[key] = new Set();
-                    attrs[key].add(value);
+                Object.entries(variant.attributes).forEach(([ key, value ]) => {
+                    if (!attrs[ key ]) attrs[ key ] = new Set();
+                    attrs[ key ].add(value);
                 });
             }
         });
         Object.keys(attrs).forEach(key => {
-            attrs[key] = Array.from(attrs[key]);
+            attrs[ key ] = Array.from(attrs[ key ]);
         });
         return attrs;
-    }, [product]);
+    }, [ product ]);
 
     useEffect(() => {
         setSelectedImage(0);
-    }, [activeVariant]);
+    }, [ activeVariant ]);
 
     const handleAttributeChange = (attrName, value) => {
-        const newAttrs = { ...selectedAttributes, [attrName]: value };
+        const newAttrs = { ...selectedAttributes, [ attrName ]: value };
         
         // Find if an exact match exists for this combination
         const exactMatch = product.variants.find(v => {
             const vAttrs = v.attributes || {};
-            return Object.keys(newAttrs).every(k => newAttrs[k] === vAttrs[k]) &&
-                   Object.keys(vAttrs).every(k => newAttrs[k] === vAttrs[k]);
+            return Object.keys(newAttrs).every(k => newAttrs[ k ] === vAttrs[ k ]) &&
+                   Object.keys(vAttrs).every(k => newAttrs[ k ] === vAttrs[ k ]);
         });
 
         if (exactMatch) {
             setSelectedAttributes(exactMatch.attributes);
         } else {
             // Find any variant that has this newly selected attribute to fallback nicely
-            const fallbackVariant = product.variants.find(v => v.attributes && v.attributes[attrName] === value);
+            const fallbackVariant = product.variants.find(v => v.attributes && v.attributes[ attrName ] === value);
             if (fallbackVariant) {
                 setSelectedAttributes(fallbackVariant.attributes);
             } else {
@@ -220,14 +225,14 @@ const ProductDetail = () => {
                             <div className="h-px w-full mb-8" style={{ backgroundColor: '#e4e2df' }} />
 
                             {/* Options/Variants */}
-                            {Object.entries(availableAttributes).map(([attrName, values]) => (
+                            {Object.entries(availableAttributes).map(([ attrName, values ]) => (
                                 <div key={attrName} className="mb-6">
                                     <h3 className="text-[10px] uppercase tracking-[0.24em] font-medium mb-3" style={{ color: '#C9A96E' }}>
                                         {attrName}
                                     </h3>
                                     <div className="flex flex-wrap gap-2">
                                         {values.map(val => {
-                                            const isSelected = selectedAttributes[attrName] === val;
+                                            const isSelected = selectedAttributes[ attrName ] === val;
                                             return (
                                                 <button
                                                     key={val}
@@ -278,6 +283,13 @@ const ProductDetail = () => {
                                     onMouseLeave={e => {
                                         e.currentTarget.style.backgroundColor = '#1b1c1a';
                                         e.currentTarget.style.color = '#fbf9f6';
+                                    }}
+
+                                    onClick={() => {
+                                        handleAddItem({
+                                            productId: product._id,
+                                            variantId: activeVariant._id
+                                        })
                                     }}
                                 >
                                     Add to Cart
