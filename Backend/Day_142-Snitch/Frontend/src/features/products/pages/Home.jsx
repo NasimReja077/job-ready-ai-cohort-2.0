@@ -2,11 +2,14 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useProduct } from "../hooks/useProduct";
 import { Link } from "react-router";
+import { useNavigate } from "react-router";
 
 const Home = () => {
-  const products = useSelector((state) => state.product.products);
-  const user = useSelector((state) => state.auth.user);
+  const products = useSelector(state => state.product.products);
+  const user = useSelector(state => state.auth.user);
   const { handleGetAllProducts } = useProduct();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     handleGetAllProducts();
@@ -108,16 +111,16 @@ const Home = () => {
           {/* ── Product Grid ── */}
           {products && products.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16 pb-32">
-              {products.map((product) => {
+              {products.map(product => {
                 const imageUrl =
                   product.images && product.images.length > 0
-                    ? product.images[0].url
+                    ? product.images[ 0 ].url
                     : "/snitch_editorial_warm.png"; // Fallback
 
                 return (
                   <div
-                    key={product._id}
-                    className="group cursor-pointer flex flex-col"
+                  onClick={() => navigate(`/product/${product._id}`)}
+                    key={product._id} className="group cursor-pointer flex flex-col"
                   >
                     {/* Image Container */}
                     <div
