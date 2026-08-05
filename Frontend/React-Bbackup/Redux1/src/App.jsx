@@ -1,5 +1,3 @@
-import React from 'react'
-import './App.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { decrement, increment, incrementValueByUserInput } from './redux/features/CounterSlice'
 const App = () => {
