@@ -1,0 +1,7 @@
+const Contact = () => {
+  return (
+    <div  className='text-2xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-x-1/2 '>Contact</div>
+  )
+}
+
+export default Contact
