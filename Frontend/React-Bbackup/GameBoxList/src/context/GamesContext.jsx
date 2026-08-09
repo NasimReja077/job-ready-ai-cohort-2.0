@@ -1,16 +1,15 @@
-import React, { Children, createContext, useState } from "react";
-import Favourite from "../pages/Favourite.jsx";
+import React, { createContext, useState } from "react";
 
 export const GamesDataContext = createContext();
 
-const GamesContext = ({ Children }) => {
+const GamesContext = ({ children }) => {
   const [favourite, setFavourite] = useState([]);
 
-  const addToFev = (game) => {
+  const addToFav = (game) => {
     setFavourite((prev) => {
-      const axists = prev.find((item) => item.id === game.id);
+      const exists = prev.find((item) => item.id === game.id);
       if (exists) return prev;
-      else return [...prev, game];
+      return [...prev, game];
     });
   };
 
