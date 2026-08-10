@@ -1,9 +1,22 @@
-import React from 'react'
+const UserCard = ({ user }) => {
+  console.log("Rendering:", user.name);
 
-function UserCard() {
   return (
-    <div>UserCard</div>
-  )
-}
+    <div className="rounded-xl border p-5 shadow-sm">
+      <div className="flex items-center gap-4">
+        <img
+          src={user.avatar}
+          alt={user.name}
+          className="h-14 w-14 rounded-full"
+        />
 
-export default UserCard
+        <div>
+          <h2 className="font-bold">{user.name}</h2>
+          <p className="text-gray-500">{user.email}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default UserCard;
