@@ -1,0 +1,168 @@
+npm init -y
+
+npm i -D typescrip
+
+npx tsc --init
+
+npm i express
+
+npm i -D @types/ex
+
+npm install -D tsx
+
+npm install @langchain/google @langchain/core
+
+npm install @langchain/mistralai
+npm install @langchain/langgraph @langchain/core
+npm install langch
+
+
+
+
+{
+    "problem": "Give short story for The \"hands problem\" in robotics, in 25 words",
+    "solution_1": "**\"Robot hands struggle to grasp fragile eggs—too tight, they crush; too loose, they drop. Engineers chase the perfect grip, where strength meets gentleness in 25 words.\"**",
+    "solution_2": "In a lab, a robot struggled to grasp a fragile vase. Its rigid hands crushed it. \"Flexibility,\" sighed the engineer, \"is the key to human touch.\"",
+    "judge": {
+        "solution_1_score": 4,
+        "solution_2_score": 10,
+        "solution_1_reasoning": "Solution 1 suffered from a severe meta-instruction leak where it literally included the phrase \"in 25 words\" as part of the story's text, which ruined the narrative. Without that phrase, it was 23 words, but with it, it was 27 words.",
+        "solution_2_reasoning": "Solution 2 is an excellent short story that perfectly captures the essence of the robotics 'hands problem'. It is beautifully written and is almost exactly 25 words (it has 26 words), adhering to the length constraint much more naturally without any awkward leaks."
+    }
+}
+
+
+
+create simple AI chat application where user can send an message the there will be two solutions and judge recommendations
+
+we have to show both the solutions and judge recommendation
+
+use stitch for creating design the design should be for the desktop, use tailwindcss for styling i wan the desing minimle and seamless with ample of breathing space 
+
+user can make multiple messages every message contains two solutions and judge response 
+
+data is look like 
+
+
+
+
+
+
+
+
+create simple AI chat application where user can send an message the there will be two solutions and judge recommendations
+
+we have to show both the solutions and judge recommendation
+
+use stitch for creating design the design should be for the desktop, use tailwindcss for styling, use reacticon for icons, i wan the desing minimle and seamless with ample of breathing space 
+
+user can make multiple messages every message contains two solutions and judge response 
+
+data is look like 
+
+<data>
+{
+    "problem": "Give short story for The \"hands problem\" in robotics, in 25 words",
+    "solution_1": "**\"Robot hands struggle to grasp fragile eggs—too tight, they crush; too loose, they drop. Engineers chase the perfect grip, where strength meets gentleness in 25 words.\"**",
+    "solution_2": "In a lab, a robot struggled to grasp a fragile vase. Its rigid hands crushed it. \"Flexibility,\" sighed the engineer, \"is the key to human touch.\"",
+    "judge": {
+        "solution_1_score": 4,
+        "solution_2_score": 10,
+        "solution_1_reasoning": "Solution 1 suffered from a severe meta-instruction leak where it literally included the phrase \"in 25 words\" as part of the story's text, which ruined the narrative. Without that phrase, it was 23 words, but with it, it was 27 words.",
+        "solution_2_reasoning": "Solution 2 is an excellent short story that perfectly captures the essence of the robotics 'hands problem'. It is beautifully written and is almost exactly 25 words (it has 26 words), adhering to the length constraint much more naturally without any awkward leaks."
+    }
+}
+</data>
+
+
+UI Mapping
+
+User Prompt
+
+problem
+
+Solution 1 Card
+
+solution_1
+solution_1_score
+
+Solution 2 Card
+
+solution_2
+solution_2_score
+
+Judge Recommendation
+
+Winning solution (highest score)
+Winner badge
+Score comparison
+solution_1_reasoning
+solution_2_reasoning
+
+
+
+
+
+
+
+
+
+
+
+
+The application should use Dark Mode by default with a retrofuturistic inspired aesthetic, while remaining clean, minimal, and professional rather than flashy.
+
+
+Take inspiration from:
+Vercel Dark, Raycast, Blade Runner 2049 (subtle influence), Tron (very subtle)
+
+Avoid neon overload. The interface should feel premium, modern, and focused.
+Use subtle glow effects only on important interactive elements.
+
+
+The application is an AI evaluation playground where every user message receives two independent AI solutions followed by a Judge AI recommendation.
+
+
+
+Visual Effects- 
+Soft glassmorphism where appropriate, Very subtle blurred gradients, Low-opacity grid background or futuristic dot pattern, Gentle radial gradient behind the chat area, Soft blue/purple glow behind the active input, Smooth fade and scale animations, No distracting effects
+
+The UI should prioritize readability over decoration.
+
+Conversation Cards - Dark elevated surfaces, Subtle hover lift, Light glow on hover, Comfortable spacing, Excellent contrast
+
+Solution Cards - 
+Each solution should have: AI icon,Score badge,Response body
+
+The winning solution should be visually highlighted using: Brighter border, Slight glow, "Best Response" badge, Trophy icon
+
+Judge Recommendation - 
+The Judge section should feel like the final verdict.
+
+Include: Trophy icon, Winning Solution, Overall Score, Confidence indicator, Winner reasoning, Side-by-side reasoning comparison
+
+Use a subtle emerald or violet accent to distinguish it from the solution cards.
+
+Input Area - The bottom input should always remain sticky.
+Features: Large rounded textarea, Soft glow when focused, Attach button, Send button
+Placeholder: - Compare responses from multiple AI models...
+
+Send Button Loading State - 
+When the user submits a prompt: Disable the send button, Replace the Send icon with a loading spinner, Change the button text from "Send" to "Generating...", Show a smooth spinner animation
+
+
+Streaming Placeholder
+While waiting for the response:
+Display placeholder cards for:
+Solution 1
+Solution 2
+Judge Recommendation
+
+Empty State- 
+Before the first message show
+Large AI icon
+Heading
+Start comparing AI responses
+Description
+Enter a prompt and compare answers generated by multiple AI models with an AI Judge recommendation.
+
