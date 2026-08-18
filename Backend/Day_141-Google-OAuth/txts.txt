@@ -1,0 +1,33 @@
+GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET
+
+passport and passport-google-oauth20
+
+
+Understanding the Problem / Feature we have to implement
+Break the solution into multiple small tasks
+implement the most easy part first
+expand
+
+
+Request Deduplication
+optimistic updates
+streaming ui 
+sstale-while-revalidate(swr)
+smart polling
+
+// masing coding
+Star Rating Component.
+
+Modal / Popup System.
+
+Theme Toggle.
+
+Countdown Timer.
+
+Search + Debounce Feature.
+
+Progress Bar with preview.
+
+Form Builder
+
+Drag & Drop Feature.
