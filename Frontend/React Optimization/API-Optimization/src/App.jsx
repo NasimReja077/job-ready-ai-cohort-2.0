@@ -36,7 +36,7 @@ const App = () => {
           </div>
         ))}
       </div>
-      <PaginationButton totalPost={postData.length} postPerPage={postParPage} setCurrentPage={setCurrentPage} />
+      <PaginationButton totalPost={postData.length} postPerPage={postParPage} setCurrentPage={setCurrentPage} currentPage={currentPage} />
     </div>
   );
 };
