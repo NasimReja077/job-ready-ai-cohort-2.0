@@ -20,9 +20,27 @@ app.get('/api/users', (req, res) => {
     const users = [
         { id: 1, name: 'Alice' },
         { id: 2, name: 'Bob' },
-        { id: 3, name: 'Charlie' },
+        { id: 3, name: 'Nasim' },
     ];
     res.json(users);
+});
+
+app.get('/api/cars', (req, res) => {
+    const cars = [
+        { id: 1, name: 'BMW' },
+        { id: 2, name: 'VOLVO' },
+        { id: 3, name: 'TATA' },
+    ];
+    res.json(cars);
+});
+
+app.get('/api/citys', (req, res) => {
+    const citys = [
+        { id: 1, name: 'KOLKATA' },
+        { id: 2, name: 'TOKIO' },
+        { id: 3, name: 'NY' },
+    ];
+    res.json(citys);
 });
 
 export default app;
