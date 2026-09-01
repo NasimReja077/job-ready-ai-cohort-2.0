@@ -13,7 +13,7 @@ app.use(cors());                     // useful while developing
 // app.use(express.static('public'));  // Not needed - frontend runs on separate Vite server
 
 // ---------- AniList helper ----------
-async function fetchCharactersFromAniList(page = 1, perPage = 24) {
+async function fetchCharactersFromAniList(page = 1, perPage = 28) {
   const query = `
     query ($page: Int, $perPage: Int) {
       Page(page: $page, perPage: $perPage) {
