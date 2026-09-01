@@ -10,7 +10,7 @@ const __dirname = dirname(__filename);
 const app = express();
 app.use(morgan('dev'));
 app.use(cors());                     // useful while developing
-// app.use(express.static('public'));  // Not needed - frontend runs on separate Vite server
+app.use(express.static('public'));   // Serve frontend static files
 
 // ---------- AniList helper ----------
 async function fetchCharactersFromAniList(page = 1, perPage = 28) {
