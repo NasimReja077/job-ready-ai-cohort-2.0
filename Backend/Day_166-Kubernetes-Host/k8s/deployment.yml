@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  express-host-deployment
+  name: express-host-deployment
 spec:
   replicas: 3
   selector:
@@ -13,11 +13,11 @@ spec:
         app: main-server
     spec:
       containers:
-      - name:  my-name
+      - name: main-server
         image: express_host_cohort:latest
-        imagePullPolicy: Always      
+        imagePullPolicy: Always
         ports:
-        - containerPort:  3000
+        - containerPort: 3000
         resources:
           limits:
             memory: "128Mi" # RAM 128 megabytes
