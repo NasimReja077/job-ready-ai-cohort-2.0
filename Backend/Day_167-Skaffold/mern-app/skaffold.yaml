@@ -1,0 +1,31 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: mern-app
+
+build:
+  local:
+    push: false
+  artifacts:
+    - image: core 
+      context: core 
+      docker:
+        dockerfile: dockerfile.dev
+      sync:
+        manual:
+          - src: '**/*.js'     # NOT 'core/**/*.js' ← that would fail
+            dest: /app
+          - src: '**/*.json'
+            dest: /app
+
+manifests:
+  rawYaml:
+    - k8s/core-deployment.yml
+    - k8s/core-service.yml
+    - k8s/ingress.yml
+
+portForward:
+  - resourceType: service
+    resourceName: core-service
+    port: 80
+    localPort: 3000
