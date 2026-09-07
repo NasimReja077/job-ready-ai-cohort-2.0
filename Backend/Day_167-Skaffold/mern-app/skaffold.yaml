@@ -21,7 +21,7 @@ build:
     - image: notification
       context: notification
       docker:
-        dockerfile: dockerfile.dev
+        dockerfile: dockerfile
       sync:
         manual:
           - src: '**/*.js'
