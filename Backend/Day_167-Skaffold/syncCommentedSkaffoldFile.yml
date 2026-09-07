@@ -1,0 +1,231 @@
+# =============================================================================
+# Skaffold Configuration
+# =============================================================================
+#
+# Skaffold automates the Kubernetes development workflow.
+#
+# Instead of manually running:
+#
+#   docker build
+#   kubectl apply
+#   kubectl rollout restart
+#
+# Skaffold does everything automatically.
+#
+# Start Development Mode:
+#
+#   skaffold dev
+#
+# Stop:
+#
+#   Ctrl + C
+#
+# =============================================================================
+
+apiVersion: skaffold/v4beta13
+kind: Config
+
+metadata:
+  name: mern-app
+
+# =============================================================================
+# BUILD CONFIGURATION
+# =============================================================================
+
+build:
+
+  # Build Docker images locally.
+  #
+  # Since we're using Docker Desktop Kubernetes,
+  # Docker images are loaded directly into the local
+  # Docker daemon instead of being pushed to Docker Hub
+  # or AWS ECR.
+  local:
+    push: false
+
+  artifacts:
+
+    # =========================================================================
+    # CORE SERVICE
+    # =========================================================================
+    - image: core
+
+      # Docker build context.
+      #
+      # Equivalent to:
+      #
+      # docker build -t core ./core
+      #
+      context: core
+
+      # -----------------------------------------------------------------------
+      # FILE SYNC
+      # -----------------------------------------------------------------------
+      #
+      # This is one of Skaffold's biggest advantages.
+      #
+      # Normally:
+      #
+      # Save File
+      #      ↓
+      # Docker Build
+      #      ↓
+      # Create New Image
+      #      ↓
+      # Restart Pod
+      #
+      #
+      # With Sync:
+      #
+      # Save File
+      #      ↓
+      # Copy File into Running Container
+      #      ↓
+      # Nodemon Detects Change
+      #      ↓
+      # Application Restarts
+      #
+      # No Docker rebuild.
+      # No Pod recreation.
+      #
+      # Development becomes much faster.
+      #
+      # -----------------------------------------------------------------------
+      #
+      # IMPORTANT
+      #
+      # Paths are always relative to "context".
+      #
+      # context: core
+      #
+      # src: '**/*.js'
+      #
+      # actually means:
+      #
+      # core/**/*.js
+      #
+      # NOT:
+      #
+      # core/core/**/*.js
+      #
+      # -----------------------------------------------------------------------
+
+      sync:
+        manual:
+
+          # Sync every JavaScript file
+          - src: "**/*.js"
+            dest: /app
+
+          # Sync every JSON file
+          - src: "**/*.json"
+            dest: /app
+
+    # =========================================================================
+    # NOTIFICATION SERVICE
+    # =========================================================================
+    - image: notification
+
+      context: notification
+
+      sync:
+        manual:
+
+          - src: "**/*.js"
+            dest: /app
+
+          - src: "**/*.json"
+            dest: /app
+
+# =============================================================================
+# KUBERNETES MANIFESTS
+# =============================================================================
+#
+# Equivalent to:
+#
+# kubectl apply -f k8s/
+#
+# Skaffold automatically deploys these manifests.
+#
+# =============================================================================
+
+manifests:
+  rawYaml:
+    - k8s/core-deployment.yml
+    - k8s/notification-deployment.yml
+    - k8s/core-service.yml
+    - k8s/notification-service.yml
+    - k8s/ingress.yml
+
+# =============================================================================
+# PORT FORWARDING
+# =============================================================================
+#
+# Kubernetes Services are only accessible inside
+# the Kubernetes cluster.
+#
+# Skaffold automatically creates port forwarding
+# so you don't have to manually run:
+#
+# kubectl port-forward
+#
+# =============================================================================
+
+portForward:
+
+  # Core API
+  - resourceType: service
+    resourceName: core-service
+    port: 80
+    localPort: 3000
+
+  # Notification API
+  - resourceType: service
+    resourceName: notification-service
+    port: 80
+    localPort: 4000
+
+# =============================================================================
+# DEVELOPMENT FLOW
+# =============================================================================
+#
+# Run:
+#
+#   skaffold dev
+#
+#
+# First Run:
+#
+# Build Images
+#      ↓
+# Apply Kubernetes Manifests
+#      ↓
+# Start Watching Files
+#
+#
+# After That...
+#
+# Every time you press Ctrl + S:
+#
+# ┌────────────────────────────────────────────┐
+# │ Is the changed file eligible for Sync?     │
+# └────────────────────────────────────────────┘
+#                │
+#         Yes    │    No
+#          │     │
+#          ▼     ▼
+#     Copy File   Build Docker Image
+#          │            │
+#          ▼            ▼
+#    Nodemon Restarts   Kubernetes Rolling Update
+#          │            │
+#          └──────┬─────┘
+#                 ▼
+#         Updated Application
+#
+#
+# Sync is much faster because Docker doesn't
+# rebuild the image and Kubernetes doesn't
+# recreate the Pod.
+#
+# =============================================================================

@@ -1,0 +1,271 @@
+# =============================================================================
+# Skaffold Configuration
+# =============================================================================
+# Skaffold automates the Kubernetes development workflow.
+#
+# Instead of manually running:
+#
+#   docker build
+#   kubectl apply
+#   kubectl rollout restart
+#
+# Skaffold will:
+#
+#   1. Watch your source code
+#   2. Build Docker images
+#   3. Deploy to Kubernetes
+#   4. Rebuild and redeploy whenever code changes
+#
+# Start Development Mode:
+#
+#   skaffold dev
+#
+# Stop:
+#
+#   Ctrl + C
+# =============================================================================
+
+apiVersion: skaffold/v4beta13
+kind: Config
+
+metadata:
+  # Name of this Skaffold project.
+  # This is just for identification.
+  name: mern-app
+
+# =============================================================================
+# BUILD CONFIGURATION
+# =============================================================================
+#
+# This section tells Skaffold:
+#
+# • What Docker images should be built
+# • Where the Dockerfiles are located
+# • Whether images should be pushed to a registry
+#
+# =============================================================================
+
+build:
+
+  # Since we're using Docker Desktop Kubernetes,
+  # build images locally instead of pushing them
+  # to Docker Hub, AWS ECR, etc.
+  local:
+    push: false
+
+  # ---------------------------------------------------------------------------
+  # Every artifact represents ONE Docker image.
+  # ---------------------------------------------------------------------------
+  artifacts:
+
+    # =========================================================================
+    # CORE SERVICE
+    # =========================================================================
+    - image: core
+
+      # Docker build context
+      # Equivalent to:
+      #
+      # docker build ./core
+      #
+      context: core
+
+      docker:
+
+        # Development Dockerfile
+        #
+        # If your Dockerfile is named "Dockerfile"
+        # this section can be removed.
+        dockerfile: dockerfile.dev
+
+      # -----------------------------------------------------------------------
+      # File Sync
+      #
+      # Without Sync:
+      #
+      # Save File
+      #      ↓
+      # Docker Build
+      #      ↓
+      # New Image
+      #      ↓
+      # New Pod
+      #
+      #
+      # With Sync:
+      #
+      # Save File
+      #      ↓
+      # Copy Changed File
+      #      ↓
+      # Nodemon Restarts
+      #
+      # Much Faster 🚀
+      #
+      # NOTE:
+      #
+      # Paths are relative to "context"
+      #
+      # context: core
+      #
+      # src: '**/*.js'
+      #
+      # Actually means:
+      #
+      # core/**/*.js
+      #
+      # NOT
+      #
+      # core/core/**/*.js
+      #
+      # -----------------------------------------------------------------------
+
+      sync:
+        manual:
+
+          # Sync every JavaScript file
+          - src: "**/*.js"
+            dest: /app
+
+          # Sync every JSON file
+          - src: "**/*.json"
+            dest: /app
+
+    # =========================================================================
+    # NOTIFICATION SERVICE
+    # =========================================================================
+    - image: notification
+
+      context: notification
+
+      docker:
+        dockerfile: dockerfile.dev
+
+      sync:
+        manual:
+          - src: "**/*.js"
+            dest: /app
+
+          - src: "**/*.json"
+            dest: /app
+
+# =============================================================================
+# KUBERNETES MANIFESTS
+# =============================================================================
+#
+# Equivalent to:
+#
+# kubectl apply -f k8s/
+#
+# You can either:
+#
+# rawYaml:
+#   - k8s/*.yml
+#
+# OR explicitly list every file.
+#
+# Explicit listing is safer because backup/testing YAML
+# files won't accidentally get deployed.
+#
+# =============================================================================
+
+manifests:
+  rawYaml:
+    - k8s/core-deployment.yml
+    - k8s/notification-deployment.yml
+    - k8s/core-service.yml
+    - k8s/notification-service.yml
+    - k8s/ingress.yml
+
+# =============================================================================
+# PORT FORWARDING
+# =============================================================================
+#
+# Kubernetes Services live inside the cluster.
+#
+# Instead of manually running:
+#
+# kubectl port-forward service/core-service 3000:80
+#
+# Skaffold automatically creates the port forwarding.
+#
+# You can directly visit:
+#
+# http://localhost:3000
+#
+# while the service continues running inside Kubernetes.
+#
+# =============================================================================
+
+portForward:
+
+  # ---------------------------------------------------------------------------
+  # Core Service
+  # ---------------------------------------------------------------------------
+  - resourceType: service
+
+    # Kubernetes Service Name
+    resourceName: core-service
+
+    # Service Port inside Kubernetes
+    port: 80
+
+    # Local Machine Port
+    localPort: 3000
+
+  # ---------------------------------------------------------------------------
+  # Notification Service
+  # ---------------------------------------------------------------------------
+  - resourceType: service
+    resourceName: notification-service
+    port: 80
+    localPort: 4000
+
+# =============================================================================
+# DEVELOPMENT WORKFLOW
+# =============================================================================
+#
+# Start:
+#
+#   skaffold dev
+#
+#
+# Skaffold continuously performs:
+#
+# Watch Files
+#      ↓
+# Detect Changes
+#      ↓
+# Sync Files (if possible)
+#      ↓
+# Otherwise Build Image
+#      ↓
+# Update Kubernetes Deployment
+#      ↓
+# Wait for Pod to Become Ready
+#      ↓
+# Watch Again...
+#
+#
+# If Sync is configured:
+#
+# Save File
+#      ↓
+# Sync File into Container
+#      ↓
+# Nodemon Restarts
+#
+# (Fastest Development Experience)
+#
+#
+# If Sync isn't possible:
+#
+# Save File
+#      ↓
+# Docker Build
+#      ↓
+# New Image
+#      ↓
+# Kubernetes Rolling Update
+#
+# =============================================================================
