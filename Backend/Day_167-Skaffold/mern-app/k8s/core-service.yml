@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name:  core-service
+spec:
+  selector:
+    app:  core
+  type:  ClusterIP
+  ports:
+  - name:  core-port
+    port:  80
+    targetPort:  3000
