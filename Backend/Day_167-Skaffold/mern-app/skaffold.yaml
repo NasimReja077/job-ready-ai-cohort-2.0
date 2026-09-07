@@ -5,15 +5,15 @@ metadata:
 
 build:
   local:
-    push: false
+    push: false  # Good for local cluster (minikube/kind/docker-desktop)
   artifacts:
-    - image: core 
-      context: core 
+    - image: core
+      context: core
       docker:
-        dockerfile: dockerfile.dev
+        dockerfile: dockerfile
       sync:
         manual:
-          - src: '**/*.js'     # NOT 'core/**/*.js' ← that would fail
+          - src: '**/*.js'
             dest: /app
           - src: '**/*.json'
             dest: /app
