@@ -16,3 +16,10 @@ spec:
             name: sandbox-service
             port: 
               number: 80
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: sandbox-service
+            port:
+              number: 80
