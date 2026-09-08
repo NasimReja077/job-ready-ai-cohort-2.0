@@ -1,0 +1,44 @@
+apiVersion: app/v1
+kind: Deployment
+metadata:
+  name:  sandbox-deployment
+  labels:
+    name:  sandbox-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sandbox
+  template:
+    metadata:
+      labels:
+        app: sandbox
+    spec:
+      containers:
+      - image:  sandbox:latest
+        imagePullPolicy: IfNotPresent
+        name:  main-sandbox-container
+        resources:
+          limits: 
+            cpu: "500m"
+            memory: "400Mi"
+          requests:
+            cpu: "250m"
+            memory: "200Mi"
+        livenessProbe: # livenessProbe - checks if the application is alive and running. If the liveness probe fails, Kubernetes will restart the container.
+          httpGet:
+            path: /api/sandbox/health
+            port: 3000
+          initialDelaySeconds: 90 # The initial delay before the first probe is sent. This allows the application to start up before Kubernetes checks its health.
+          timeoutSeconds: 10
+        readinessProbe: # readinessProbe - checks if the application is ready to serve traffic. If the readiness probe fails, Kubernetes will stop sending traffic to the container until it passes.
+          httpGet:
+            path: /api/sandbox/health
+            port: 3000
+          initialDelaySeconds: 30 # The initial delay before the first probe is sent. This allows the application to start up before Kubernetes checks its readiness.
+          timeoutSeconds: 10      
+        ports:
+        - containerPort:  3000
+          name:  main-sandbox
+
+        
