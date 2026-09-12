@@ -9,31 +9,21 @@ spec:
   rules:
   - http:
       paths:
-      # Main host – sandbox API
-      - path: /api/sandbox
-        pathType: Prefix
+      - pathType: Prefix
+        path: "/api/sandbox"
         backend:
           service:
             name: sandbox-service
-            port:
+            port: 
               number: 80
 
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: sandbox-service
-            port:
-              number: 80
-
-    # Preview subdomains – router          
   - host: "*.preview.localhost"
     http:
       paths:
-      - path: /
-        pathType: Prefix
+      - pathType: Prefix
+        path: "/"
         backend:
           service:
             name: router-service
-            port:
+            port: 
               number: 80

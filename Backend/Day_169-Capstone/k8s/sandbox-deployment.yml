@@ -20,7 +20,7 @@ spec:
         imagePullPolicy: IfNotPresent
         name:  main-sandbox-container
         resources:
-          limits: 
+          limits:
             cpu: "500m"
             memory: "400Mi"
           requests:
@@ -41,5 +41,3 @@ spec:
         ports:
         - containerPort:  3000
           name:  main-sandbox
-
-        
