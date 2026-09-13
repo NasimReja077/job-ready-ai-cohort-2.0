@@ -2,6 +2,8 @@ import { k8sCoreV1Api } from "./config.js";
 
 export const createService = async (sandboxId) => {
     const serviceManifest = {
+        apiVersion: 'v1',
+        kind: 'Service',
         metadata: {
             name: `sandbox-service-${sandboxId}`,
             labels: {

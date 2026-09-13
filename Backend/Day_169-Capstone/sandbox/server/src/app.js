@@ -10,6 +10,12 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+app.get('/api/sandbox/livez', (req, res) => {
+    res.status(200).json({ status: 'ok' });
+});
+
+
 app.get('/api/sandbox/health', (req, res) => {
     res.status(200).json({
         message: 'Sandbox API is healthy',
@@ -21,10 +27,15 @@ app.post("/api/sandbox/start", async (req, res) => {
 
     const sandboxId = uuid();
 
-    await Promise.all([
-        createPod(sandboxId),
-        createService(sandboxId)
-    ]);
+    try {
+        await Promise.all([
+            createPod(sandboxId),
+            createService(sandboxId)
+        ]);
+    } catch (err) {
+        console.error(`Failed to create sandbox ${sandboxId}:`, err.message);
+        return res.status(500).json({ error: 'Failed to create sandbox environment' });
+    }
 
     return res.status(201).json({
         message: 'Sandbox environment created successfully',
