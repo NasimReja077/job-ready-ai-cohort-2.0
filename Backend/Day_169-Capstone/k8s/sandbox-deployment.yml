@@ -26,17 +26,17 @@ spec:
           requests:
             cpu: "250m"
             memory: "200Mi"
-        livenessProbe: # livenessProbe - checks if the application is alive and running. If the liveness probe fails, Kubernetes will restart the container.
+        livenessProbe: # checks if the process is alive; uses a cheap static route so a slow K8s API call cannot trigger a restart
           httpGet:
-            path: /api/sandbox/health
+            path: /api/sandbox/livez
             port: 3000
-          initialDelaySeconds: 90 # The initial delay before the first probe is sent. This allows the application to start up before Kubernetes checks its health.
+          initialDelaySeconds: 90
           timeoutSeconds: 10
-        readinessProbe: # readinessProbe - checks if the application is ready to serve traffic. If the readiness probe fails, Kubernetes will stop sending traffic to the container until it passes.
+        readinessProbe: # checks if the pod is ready to serve traffic
           httpGet:
             path: /api/sandbox/health
             port: 3000
-          initialDelaySeconds: 30 # The initial delay before the first probe is sent. This allows the application to start up before Kubernetes checks its readiness.
+          initialDelaySeconds: 30
           timeoutSeconds: 10      
         ports:
         - containerPort:  3000
