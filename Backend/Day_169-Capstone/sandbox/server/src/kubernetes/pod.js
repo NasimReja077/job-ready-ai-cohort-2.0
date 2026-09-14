@@ -20,6 +20,20 @@ export async function createPod(sandboxId) {
                     emptyDir: {}
                 }
             ],
+            initContainers: [ // init container is used to copy the workspace from the template image to the shared volume. This ensures that the agent container has access to the workspace files.
+                {
+                    name: 'init-container',
+                    image: "template",
+                    imagePullPolicy: "IfNotPresent",
+                    command: ['sh', '-c', 'cp -r /workspace/. /seed/'], // copy the workspace from the template image to the shared volume
+                    volumeMounts: [
+                        {
+                            name: 'workspace-volume',
+                            mountPath: '/seed'
+                        }
+                    ]
+                }
+            ],
             containers: [
                 {
                     image: "template",
