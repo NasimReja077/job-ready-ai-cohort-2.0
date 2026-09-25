@@ -1,8 +1,10 @@
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Link from "next/link";
 import React from "react";
 
-function page() {
+const page = ()=> {
   return (
+    <ProtectedRoute>
     <div className="space-y-10 py-6">
       <section className="overflow-hidden rounded-3xl border bg-gradient-to-r from-primary/10 via-background to-secondary/30 p-8 shadow-sm md:p-12">
         <div className="grid items-center gap-8 md:grid-cols-2">
@@ -19,13 +21,13 @@ function page() {
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
-                href="/products"
+                href="/layout/products"
                 className="inline-flex items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition hover:opacity-90"
               >
                 Shop now
               </Link>
               <Link
-                href="/products"
+                href="/layout/products"
                 className="inline-flex items-center justify-center rounded-xl border border-border bg-background px-5 py-3 text-sm font-medium transition hover:bg-muted"
               >
                 Browse deals
@@ -80,6 +82,7 @@ function page() {
         ))}
       </section>
     </div>
+    </ProtectedRoute>
   );
 }
 
