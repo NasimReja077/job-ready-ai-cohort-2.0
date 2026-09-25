@@ -13,7 +13,7 @@ const ProductCard = ({ product }) => {
     <Card className="group overflow-hidden rounded-2xl border bg-background transition-all duration-300 hover:shadow-xl">
       {/* Product Image */}
       <Link
-        href={`/products/${product.id}`}
+        href={`/layout/products/${product.id}`}
         className="relative block h-[250px] w-full overflow-hidden bg-muted"
       >
         <img
