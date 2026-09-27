@@ -1,10 +1,14 @@
+import { IUser } from "@/types/user.types";
 import mongoose, { Document } from "mongoose";
 import bcrypt from 'bcrypt'
-import { timeStamp } from "node:console";
 
 
-const userSchema = new mongoose.Schema({
-     name: {
+interface UserDocument extends Omit<IUser, '_id'>, Document {
+    comparePass(candidatePassword: string): boolean
+}
+
+let userSchema = new mongoose.Schema<UserDocument>({
+    name: {
         type: String,
         trim: true,
         required: [true, 'Name is required']
@@ -25,18 +29,19 @@ const userSchema = new mongoose.Schema({
         minlength: [10, "min 10 characters required"],
         maxlength: [10, "max 10 characters required"]
     },
+
 }, {
-     timestamps: true
+    timestamps: true
 })
 
 userSchema.pre('save', function (): void {
-     if (!this.isModified('password')) return
-     this.password = bcrypt.hashSync(this.password, 10)
+    if (!this.isModified('password')) return
+    this.password = bcrypt.hashSync(this.password, 10)
 })
 
 userSchema.methods.comparePass = function (candidatePassword: string): boolean {
     return bcrypt.compareSync(candidatePassword, this.password)
 }
 
-const UseModel = mongoose.model('User', userSchema)
-export default UseModel;
+const UserModel = mongoose.model('User', userSchema)
+export default UserModel;
