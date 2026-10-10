@@ -4,7 +4,7 @@ export const recommendCatsTool = async (
   kidsFriendly: boolean,
   apartmentFriendly: boolean
 ) => {
-  const res = await axios.post("http://localhost:3000/api/cats/recommend", {
+  const res = await axios.post("http://localhost:5000/api/cats/recommend", {
     kidsFriendly,
     apartmentFriendly,
   });
@@ -13,7 +13,7 @@ export const recommendCatsTool = async (
 };
 
 export const getAllCatsTool = async () => {
-  const res = await axios.get("http://localhost:3000/api/cats");
+  const res = await axios.get("http://localhost:5000/api/cats");
 
   return res.data;
 };
