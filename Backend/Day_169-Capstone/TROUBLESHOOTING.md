@@ -300,6 +300,30 @@ Expected response shape:
 }
 ```
 
+## Problem 6: `*.agent.localhost` Does Not Resolve in Postman
+
+### Cause
+
+Wildcard Ingress hostnames such as `<sandbox-id>.agent.localhost` may not resolve on the Windows host. The sandbox ID is also generated each time `POST /api/sandbox/start` is called, so use the `sandboxId` from that response rather than a hard-coded ID.
+
+### Test the agent endpoint with localhost
+
+Start a port-forward for the generated sandbox's agent port:
+
+```powershell
+kubectl port-forward service/sandbox-service-<sandbox-id> 8081:3000
+```
+
+Then use this Postman request:
+
+```text
+GET http://localhost:8081/list-files
+```
+
+Use `GET /read-files?files=...` and `PATCH /update-files` on the same localhost URL for the other agent routes.
+
+To make the orchestration agent use this connection, set `SANDBOX_AGENT_URL=http://localhost:8081` in its environment before running `node src/agents/code.agent.js`. Alternatively, set `SANDBOX_ID=<sandbox-id>` when wildcard DNS and Ingress routing are configured.
+
 ## Final Verification Checklist
 
 Run these checks from the repository root:

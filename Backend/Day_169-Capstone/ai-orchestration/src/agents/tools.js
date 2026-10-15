@@ -2,6 +2,18 @@ import axios from 'axios';
 import { tool } from "langchain"
 import * as z from "zod";
 
+const SANDBOX_AGENT_URL = process.env.SANDBOX_AGENT_URL?.replace(/\/+$/, "") ||
+    (process.env.SANDBOX_ID
+        ? `http://${process.env.SANDBOX_ID}.agent.localhost`
+        : undefined);
+
+function getSandboxAgentUrl() {
+    if (!SANDBOX_AGENT_URL) {
+        throw new Error("Set SANDBOX_AGENT_URL or SANDBOX_ID before using sandbox tools.");
+    }
+
+    return SANDBOX_AGENT_URL;
+}
 
 export const listFiles = tool(
     async ({ }) => {
@@ -9,7 +21,7 @@ export const listFiles = tool(
         console.log("using list files tool")
         console.log("=================================")
 
-        const response = await axios.get("http://019e2739-bc90-7502-aafc-23850483cdbe.agent.localhost/list-files")
+        const response = await axios.get(`${getSandboxAgentUrl()}/list-files`)
 
 
         console.log("=================================")
@@ -32,7 +44,9 @@ export const readFiles = tool(
         console.log("using read files tool with files", files)
         console.log("=================================")
 
-        const response = await axios.get("http://019e2739-bc90-7502-aafc-23850483cdbe.agent.localhost/read-files?files=" + files.join(","))
+        const response = await axios.get(`${getSandboxAgentUrl()}/read-files`, {
+            params: { files: files.join(",") }
+        })
 
         console.log("=================================")
         console.log("response from read files tool", response.data)
@@ -55,7 +69,7 @@ export const updateFiles = tool(
         console.log("using update files tool with files", files)
         console.log("=================================")
 
-        const response = await axios.patch("http://019e2739-bc90-7502-aafc-23850483cdbe.agent.localhost/update-files", {
+        const response = await axios.patch(`${getSandboxAgentUrl()}/update-files`, {
             updates: files
         })
         console.log("=================================")
