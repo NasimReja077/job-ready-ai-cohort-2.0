@@ -127,7 +127,7 @@ app.get("/read-files", async (req, res) => {
 
 /**
  * @route PATCH /update-files
- * @description Updates the content of files specified in the request body. The request body should container a property 'updates' with a JSON Array of object, each object should have a 'file' property specifying the file path (relative to the working directory) and a 'content' property specifying the new content for the file.
+ * @description Updates the content of files specified in the request body. The request body should container a property 'updates' with a JSON Array of object, each object should have a 'file' property specifying the file path (relative to the working directory) and a 'content' property specifying the new content for the file. The legacy 'files' path property is also accepted.
  */
 app.patch("/update-files", async (req, res) => {
 
@@ -140,8 +140,21 @@ app.patch("/update-files", async (req, res) => {
         });
     }
 
+    const hasInvalidUpdate = updates.some((update) => {
+        const file = update?.file ?? update?.files;
+        return typeof file !== 'string' || !file.trim() || typeof update?.content !== 'string';
+    });
+
+    if (hasInvalidUpdate) {
+        return res.status(400).json({
+            message: 'Each update must include a "file" path and string "content". The legacy "files" path property is also accepted.',
+            status: 'error',
+        });
+    }
+
     const results = await Promise.all(updates.map(async (update) => {
-        const { file, content } = update;
+        const file = update.file ?? update.files;
+        const { content } = update;
         const filePath = path.join(WORKING_DIR, file);
         try {
 
@@ -168,7 +181,7 @@ app.patch("/update-files", async (req, res) => {
 
 /**
  * @route POST /create-files
- * @description Creates new files with the content specified in the request body. The request body should contain a property 'files' with a JSON Array of objects, each object should have a 'file' property specifying the file path (relative to the working directory) and a 'content' property specifying the content for the new file.
+ * @description Creates new files with the content specified in the request body. The request body should contain a property 'files' with a JSON Array of objects, each object should have a 'file' property specifying the file path (relative to the working directory) and a 'content' property specifying the content for the new file. The legacy 'files' path property is also accepted.
  */
 app.post("/create-files", async (req, res) => {
     const files = req.body.files;
@@ -180,8 +193,21 @@ app.post("/create-files", async (req, res) => {
         });
     }
 
+    const hasInvalidFile = files.some((fileObj) => {
+        const file = fileObj?.file ?? fileObj?.files;
+        return typeof file !== 'string' || !file.trim() || typeof fileObj?.content !== 'string';
+    });
+
+    if (hasInvalidFile) {
+        return res.status(400).json({
+            message: 'Each file must include a "file" path and string "content". The legacy "files" path property is also accepted.',
+            status: 'error',
+        });
+    }
+
     const results = await Promise.all(files.map(async (fileObj) => {
-        const { file, content } = fileObj;
+        const file = fileObj.file ?? fileObj.files;
+        const { content } = fileObj;
         const filePath = path.join(WORKING_DIR, file);
         try {
 
