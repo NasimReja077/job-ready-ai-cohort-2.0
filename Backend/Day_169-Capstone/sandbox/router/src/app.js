@@ -2,6 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import { createProxyMiddleware } from "http-proxy-middleware";
 import http from 'http';
+import { getAgentRoute, getPreviewRoute } from "./agent-route.js";
 
 const app = express();
 app.use(morgan('combined'));
@@ -16,6 +17,22 @@ app.get('/api/status/readyz', (req, res) => {
 
 const proxies = {}
 const agentProxies = {}
+
+app.use((req, res, next) => {
+    const agentRoute = getAgentRoute(req.url);
+    if (agentRoute) {
+        req.url = agentRoute.path;
+        return getAgentProxy(agentRoute.sandboxId)(req, res, next);
+    }
+
+    const previewRoute = getPreviewRoute(req.url);
+    if (!previewRoute) {
+        return next();
+    }
+
+    req.url = previewRoute.path;
+    return getProxy(previewRoute.sandboxId)(req, res, next);
+});
 
 
 function getProxy(sandboxId) {
@@ -79,6 +96,20 @@ const server = http.createServer(app);
 
 // Handle WebSocket upgrade requests
 server.on('upgrade', (req, socket, head) => {
+    const agentRoute = getAgentRoute(req.url);
+    if (agentRoute) {
+        req.url = agentRoute.path;
+        getAgentProxy(agentRoute.sandboxId).upgrade(req, socket, head);
+        return;
+    }
+
+    const previewRoute = getPreviewRoute(req.url);
+    if (previewRoute) {
+        req.url = previewRoute.path;
+        getProxy(previewRoute.sandboxId).upgrade(req, socket, head);
+        return;
+    }
+
     const host = req.headers.host;
     if (!host) {
         socket.destroy();
