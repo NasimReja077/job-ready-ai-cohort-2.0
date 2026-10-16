@@ -24,7 +24,7 @@ export default function App() {
   const dragStartH = useRef(0)
 
   const handleSandboxCreated = useCallback((data) => {
-    const agentBase = `http://${data.sandboxId}.agent.localhost`
+    const agentBase = `/api/sandbox/agent/${encodeURIComponent(data.sandboxId)}`
     setSandbox({ sandboxId: data.sandboxId, previewUrl: data.previewUrl, agentBase })
     setStatus('ready')
   }, [])
@@ -112,7 +112,7 @@ export default function App() {
 
           {/* Terminal */}
           <div className="shrink-0 overflow-hidden" style={{ height: `${terminalHeight}px` }}>
-            <Terminal sandboxId={sandboxId} />
+            <Terminal agentBase={agentBase} />
           </div>
         </div>
 

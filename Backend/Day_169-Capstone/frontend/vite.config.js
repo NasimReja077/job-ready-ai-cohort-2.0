@@ -8,9 +8,14 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
     port: 5173,
+    allowedHosts: true,
+    watch: {
+      usePolling: true,
+      interval: 100
+    },
     proxy: {
       "/api": {
-        target: "https://google.com",
+        target: "http://localhost",
         changeOrigin: true,
         secure: false
       }

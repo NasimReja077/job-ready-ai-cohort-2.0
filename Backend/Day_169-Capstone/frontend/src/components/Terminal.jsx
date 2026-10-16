@@ -4,7 +4,7 @@ import { FitAddon } from '@xterm/addon-fit'
 import { WebLinksAddon } from '@xterm/addon-web-links'
 import { io } from 'socket.io-client'
 
-export default function Terminal({ sandboxId }) {
+export default function Terminal({ agentBase }) {
   const containerRef = useRef(null)
   const termRef = useRef(null)
   const fitAddonRef = useRef(null)
@@ -68,12 +68,11 @@ export default function Terminal({ sandboxId }) {
   }, [])
 
   const connectSocket = useCallback((term) => {
-    if (!sandboxId || !term) return
-
-    const agentHost = `http://${sandboxId}.agent.localhost`
+    if (!agentBase || !term) return
 
     try {
-      const socket = io(agentHost, {
+      const socket = io(window.location.origin, {
+        path: `${agentBase}/socket.io`,
         transports: ['websocket', 'polling'],
         reconnectionAttempts: 5,
         reconnectionDelay: 1000,
@@ -110,7 +109,7 @@ export default function Terminal({ sandboxId }) {
     } catch (err) {
       setError(err.message)
     }
-  }, [sandboxId])
+  }, [agentBase])
 
   useEffect(() => {
     const term = initTerminal()
