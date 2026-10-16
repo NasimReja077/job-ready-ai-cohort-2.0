@@ -1,19 +1,20 @@
 import dotenv from "dotenv";
 import { fileURLToPath } from "node:url";
-import { ChatMistralAI } from "@langchain/mistralai"
-import { listFiles, readFiles, updateFiles } from "./tools.js";
+import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { createAgent } from "langchain";
+import { listFiles, readFiles, updateFiles } from "./tools.js";
 
-dotenv.config({ path: fileURLToPath(new URL("../../.env", import.meta.url)) });
+dotenv.config({ path: fileURLToPath(new URL("../../.env", import.meta.url)), quiet: true });
 
-const mistralApiKey = process.env.MISTRAL_API_KEY?.trim();
+const apiKey = process.env.GOOGLE_API_KEY?.trim();
+if (!apiKey) throw new Error("GOOGLE_API_KEY is not set");
 
-const model = new ChatMistralAI({
-    model: "mistral-small-latest",   // was mistral-large-latest
-    apiKey: mistralApiKey,
-    temperature: 0.7,
-    maxRetries: 0,
-    maxTokens: 8000,
+const model = new ChatGoogleGenerativeAI({
+    model: process.env.GOOGLE_MODEL || "gemini-3-flash-preview",
+    apiKey: apiKey,
+    temperature: 0.4,
+    maxRetries: 2,
+    maxOutputTokens: 32000,
 })
 
 const agent = (createAgent({
@@ -39,7 +40,7 @@ TOOLS — HOW TO USE THEM
 
 Rules:
 - Always \`list_files\` → \`read_files\` → reason → \`update_files\`. Skipping the read step is the most common cause of bugs.
-- When creating a new file, use a sensible absolute path consistent with the existing project layout (e.g., \`/app/src/components/Hero.jsx\`).
+- When creating a new file, use a path relative to the project root and matching the paths returned by \`list_files\` (e.g., \`src/components/Hero.jsx\`).
 - Do not delete files unless explicitly asked. To "remove" something, refactor it out and update the imports.
 - After a batch of updates, briefly confirm what changed. Do not re-print the full file contents in chat.
 

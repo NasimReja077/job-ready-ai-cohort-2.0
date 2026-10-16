@@ -4,9 +4,10 @@ import agent from "../agents/code.agent.js";
 const agentRouter = Router();
 
 agentRouter.post("/invoke", async (req, res) => {
-    const { message, projectId } = req.body;
+    const { message, projectId } = req.body ?? {};
 
-    if (!message || !projectId) {
+    if (typeof message !== "string" || !message.trim() ||
+        typeof projectId !== "string" || !projectId.trim()) {
         return res.status(400).json({ error: "message and projectId are required" });
     }
 

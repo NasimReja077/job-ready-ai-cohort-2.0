@@ -1,38 +1,50 @@
 import axios from 'axios';
 import dotenv from "dotenv";
-import { fileURLToPath } from "node:url";
-import { write } from 'fs';
 import { tool } from "langchain"
 import * as z from "zod";
+import { fileURLToPath } from "node:url";
 
 dotenv.config({
     path: fileURLToPath(new URL("../../.env", import.meta.url)),
     quiet: true,
 });
 
-const SANDBOX_AGENT_URL = process.env.SANDBOX_AGENT_URL?.trim().replace(/\/+$/, "") ||
-    (process.env.SANDBOX_ID
-        ? `http://sandbox-service-${process.env.SANDBOX_ID}:3000`
-        : undefined);
+export function getSandboxAgentUrl(projectId) {
+    const configuredUrl = process.env.SANDBOX_AGENT_URL?.trim();
+    if (configuredUrl) {
+        let url;
+        try {
+            url = new URL(configuredUrl);
+        } catch {
+            throw new Error("SANDBOX_AGENT_URL must be a valid HTTP or HTTPS URL.");
+        }
 
-function getSandboxAgentUrl() {
-    if (!SANDBOX_AGENT_URL) {
-        throw new Error("Set SANDBOX_AGENT_URL or SANDBOX_ID before using sandbox tools.");
+        if (url.protocol !== "http:" && url.protocol !== "https:") {
+            throw new Error("SANDBOX_AGENT_URL must be a valid HTTP or HTTPS URL.");
+        }
+
+        return configuredUrl.replace(/\/+$/, "");
     }
 
-    return SANDBOX_AGENT_URL;
+    const requestSandboxId = typeof projectId === "string" ? projectId.trim() : "";
+    const sandboxId = requestSandboxId || process.env.SANDBOX_ID?.trim();
+    if (!sandboxId) {
+        throw new Error("Set SANDBOX_AGENT_URL or provide a projectId/SANDBOX_ID before using sandbox tools.");
+    }
+    if (sandboxId.length > 48 || !/^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/.test(sandboxId)) {
+        throw new Error("projectId must be a valid Kubernetes service identifier.");
+    }
+
+    return `http://sandbox-service-${sandboxId}:3000`;
 }
 
 export const listFiles = tool(
     async ({ }, config) => {
-
         const writer = config.writer;
-
-        writer("Listing files in project directory...\n");
-
-        const response = await axios.get(`http://sandbox-service-${config.context.projectId}:3000/list-files`)
-
-        writer("Files listed successfully." + "Files: " + response.data.files.join(",") + "\n");
+        writer?.("Listing files in project directory...\n");
+        const sandboxUrl = getSandboxAgentUrl(config.context?.projectId);
+        const response = await axios.get(`${sandboxUrl}/list-files`);
+        writer?.(`Files listed successfully. Files: ${response.data.files.join(",")}\n`);
 
         return JSON.stringify(response.data.files);
     },
@@ -44,22 +56,20 @@ export const listFiles = tool(
 )
 
 export const readFiles = tool(
-   async ({ files = [] }, config) => {
-
+    async ({ files = [] }, config) => {
         const writer = config.writer;
-
-        writer("Reading files..." + files.join(",") + "\n");
-
-        const response = await axios.get(`http://sandbox-service-${config.context.projectId}:3000/read-files?files=` + files.join(","))
-
-        writer("Files read successfully.\n");
+        writer?.(`Reading files...${files.join(",")}\n`);
+        const sandboxUrl = getSandboxAgentUrl(config.context?.projectId);
+        const query = new URLSearchParams({ files: files.join(",") });
+        const response = await axios.get(`${sandboxUrl}/read-files?${query}`);
+        writer?.("Files read successfully.\n");
         return JSON.stringify(response.data);
     },
     {
         name: "read_files",
         description: "Read the contents of specified files. This is useful for understanding the content of files that are relevant to the task at hand.",
         schema: z.object({
-            files: z.array(z.string()).describe("The list of files absolute paths to read. These should be files that were listed using the list_files tool or created later")
+            files: z.array(z.string()).describe("File paths returned by list_files, relative to the project root")
         })
     }
 )
@@ -67,13 +77,12 @@ export const readFiles = tool(
 export const updateFiles = tool(
     async ({ files }, config) => {
         const writer = config.writer;
-
-        writer("Updating files..." + files.map(f => f.file).join(",") + "\n");
-
-        const response = await axios.patch(`http://sandbox-service-${config.context.projectId}:3000/update-files`, {
+        writer?.(`Updating files...${files.map(f => f.file).join(",")}\n`);
+        const sandboxUrl = getSandboxAgentUrl(config.context?.projectId);
+        const response = await axios.patch(`${sandboxUrl}/update-files`, {
             updates: files
-        })
-        writer("Files updated successfully.\n");
+        });
+        writer?.("Files updated successfully.\n");
         return JSON.stringify(response.data.results);
     },
     {
@@ -81,7 +90,7 @@ export const updateFiles = tool(
         description: "Update the contents of specified files. This is useful for making changes to files based on the requirements of the task at hand. this tool can also use to create new files by providing a new file name in the file field and the content to be added in the content field.",
         schema: z.object({
             files: z.array(z.object({
-                file: z.string().describe("The absolute path of the file to update"),
+                file: z.string().describe("The file path relative to the project root"),
                 content: z.string().describe("The new content for the file, the content should support json format.")
             })).describe("The list of files to update and their new contents")
         })
