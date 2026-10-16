@@ -324,6 +324,25 @@ Use `GET /read-files?files=...` and `PATCH /update-files` on the same localhost 
 
 To make the orchestration agent use this connection, set `SANDBOX_AGENT_URL=http://localhost:8081` in its environment before running `node src/agents/code.agent.js`. Alternatively, set `SANDBOX_ID=<sandbox-id>` when wildcard DNS and Ingress routing are configured.
 
+## Problem 7: Postman Gets 404 or `/list-files` Returns an Empty Array
+
+`GET /list-files` is a GET route. If the agent logs show `POST /list-files 404`, change the Postman method to **GET**; the browser request succeeds because opening the URL sends GET.
+
+Running the agent image by itself does not populate `/workspace`:
+
+```powershell
+docker run -p 8080:3000 agent:latest
+```
+
+In Kubernetes, the sandbox pod mounts the template workspace into `/workspace`. For a local Docker test, run the command below from `sandbox/agent` to mount the template project into the agent container:
+
+```powershell
+$templatePath = (Resolve-Path ..\template).Path
+docker run --rm -p 8080:3000 --mount "type=bind,source=$templatePath,target=/workspace" agent:latest
+```
+
+Then send **GET** `http://localhost:8080/list-files` in Postman. The `agent.localhost` Ingress URL is separate from this local Docker test.
+
 ## Final Verification Checklist
 
 Run these checks from the repository root:
