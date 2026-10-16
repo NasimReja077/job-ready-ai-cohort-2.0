@@ -1,6 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
-import { createProxyMiddleware } from "http-proxy-middleware"
+import { createProxyMiddleware } from "http-proxy-middleware";
+import http from 'http';
 
 const app = express();
 app.use(morgan('combined'));
@@ -25,7 +26,7 @@ function getProxy(sandboxId) {
             target,
             changeOrigin: true,
             ws: true,
-        })
+        });
     }
     return proxies[ sandboxId ];
 }
@@ -38,17 +39,14 @@ function getAgentProxy(sandboxId) {
             target,
             changeOrigin: true,
             ws: true,
-        })
+        });
     }
     return agentProxies[ sandboxId ];
 }
 
-// app.use((req, res, next) => {
-//     const host = req.headers.host;
-//     const sandboxId = host.split('.')[ 0 ]; // Extract sandboxId from subdomain
-
 app.use((req, res, next) => {
     const host = req.headers.host;
+
     if (!host) {
         return next();
     }
@@ -65,23 +63,44 @@ app.use((req, res, next) => {
      * pod1.agent.localhost
      */
 
-    // if (host.split('.')[ 1 ] === 'agent') {
-    //     return getAgentProxy(sandboxId)(req, res, next);
-    // }
-
     if (hostParts[ 1 ] === 'agent') {
         return getAgentProxy(sandboxId)(req, res, next);
     }
 
-    // else if (host.split('.')[ 1 ] === 'preview') {
-    //     return getProxy(sandboxId)(req, res, next);
-    // }
-
-    else if (hostParts[ 1 ] === 'preview') {
+    if (hostParts[ 1 ] === 'preview') {
         return getProxy(sandboxId)(req, res, next);
     }
 
     return next();
-})
+});
 
-export default app
+// Create the HTTP server explicitly to handle WebSocket upgrades
+const server = http.createServer(app);
+
+// Handle WebSocket upgrade requests
+server.on('upgrade', (req, socket, head) => {
+    const host = req.headers.host;
+    if (!host) {
+        socket.destroy();
+        return;
+    }
+
+    const hostParts = host.split('.');
+    const sandboxId = hostParts[ 0 ];
+    const type = hostParts[ 1 ];
+
+    console.log(`WebSocket upgrade request: ${host}, sandboxId: ${sandboxId}, type: ${type}`);
+
+    // Handle WebSocket upgrade based on the type (agent or preview)
+    if (hostParts.length < 2) {
+        socket.destroy();
+    } else if (type === 'agent') {
+        getAgentProxy(sandboxId).upgrade(req, socket, head);
+    } else if (type === 'preview') {
+        getProxy(sandboxId).upgrade(req, socket, head);
+    } else {
+        socket.destroy();
+    }
+});
+
+export default server;
