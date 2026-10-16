@@ -40,9 +40,8 @@ app.post("/api/sandbox/start", async (req, res) => {
     return res.status(201).json({
         message: 'Sandbox environment created successfully',
         sandboxId,
-        previewUrl: `http://${sandboxId}.preview.localhost`
+        previewUrl: `/api/sandbox/preview/${encodeURIComponent(sandboxId)}`
     })
-
 })
 
 export default app;
