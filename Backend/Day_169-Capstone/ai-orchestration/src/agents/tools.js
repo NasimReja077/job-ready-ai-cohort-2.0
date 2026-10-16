@@ -1,10 +1,18 @@
 import axios from 'axios';
+import dotenv from "dotenv";
+import { fileURLToPath } from "node:url";
+import { write } from 'fs';
 import { tool } from "langchain"
 import * as z from "zod";
 
-const SANDBOX_AGENT_URL = process.env.SANDBOX_AGENT_URL?.replace(/\/+$/, "") ||
+dotenv.config({
+    path: fileURLToPath(new URL("../../.env", import.meta.url)),
+    quiet: true,
+});
+
+const SANDBOX_AGENT_URL = process.env.SANDBOX_AGENT_URL?.trim().replace(/\/+$/, "") ||
     (process.env.SANDBOX_ID
-        ? `http://${process.env.SANDBOX_ID}.agent.localhost`
+        ? `http://sandbox-service-${process.env.SANDBOX_ID}:3000`
         : undefined);
 
 function getSandboxAgentUrl() {
@@ -16,17 +24,15 @@ function getSandboxAgentUrl() {
 }
 
 export const listFiles = tool(
-    async ({ }) => {
-        console.log("=================================")
-        console.log("using list files tool")
-        console.log("=================================")
+    async ({ }, config) => {
 
-        const response = await axios.get(`${getSandboxAgentUrl()}/list-files`)
+        const writer = config.writer;
 
+        writer("Listing files in project directory...\n");
 
-        console.log("=================================")
-        console.log("response from list files tool", response.data)
-        console.log("=================================")
+        const response = await axios.get(`http://sandbox-service-${config.context.projectId}:3000/list-files`)
+
+        writer("Files listed successfully." + "Files: " + response.data.files.join(",") + "\n");
 
         return JSON.stringify(response.data.files);
     },
@@ -38,19 +44,15 @@ export const listFiles = tool(
 )
 
 export const readFiles = tool(
-    async ({ files: [] }) => {
+   async ({ files = [] }, config) => {
 
-        console.log("=================================")
-        console.log("using read files tool with files", files)
-        console.log("=================================")
+        const writer = config.writer;
 
-        const response = await axios.get(`${getSandboxAgentUrl()}/read-files`, {
-            params: { files: files.join(",") }
-        })
+        writer("Reading files..." + files.join(",") + "\n");
 
-        console.log("=================================")
-        console.log("response from read files tool", response.data)
-        console.log("=================================")
+        const response = await axios.get(`http://sandbox-service-${config.context.projectId}:3000/read-files?files=` + files.join(","))
+
+        writer("Files read successfully.\n");
         return JSON.stringify(response.data);
     },
     {
@@ -63,19 +65,15 @@ export const readFiles = tool(
 )
 
 export const updateFiles = tool(
-    async ({ files }) => {
+    async ({ files }, config) => {
+        const writer = config.writer;
 
-        console.log("=================================")
-        console.log("using update files tool with files", files)
-        console.log("=================================")
+        writer("Updating files..." + files.map(f => f.file).join(",") + "\n");
 
-        const response = await axios.patch(`${getSandboxAgentUrl()}/update-files`, {
+        const response = await axios.patch(`http://sandbox-service-${config.context.projectId}:3000/update-files`, {
             updates: files
         })
-        console.log("=================================")
-        console.log("response from update files tool", response.data)
-        console.log("=================================")
-
+        writer("Files updated successfully.\n");
         return JSON.stringify(response.data.results);
     },
     {
