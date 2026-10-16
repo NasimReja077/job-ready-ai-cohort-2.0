@@ -12,6 +12,12 @@ metadata:
     
     # Time in seconds to establish a connection to the pod
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "6000"
+
+    # Use cookie-based session affinity to ensure that requests from the same client are routed to the same backend pod
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+
+    # Name of the cookie used for session affinity
+    nginx.ingress.kubernetes.io/session-cookie-name: "route"
     
   labels:
     app.kubernetes.io/name: codespace-ingress
