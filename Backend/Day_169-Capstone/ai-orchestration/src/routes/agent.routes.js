@@ -25,9 +25,34 @@ agentRouter.post("/invoke", async (req, res) => {
             "X-Accel-Buffering": "no",   // stops nginx buffering SSE
         });
 
+        const writer = (text) => res.write(text);
+
+        const stream = await agent.stream(
+            { messages: [ { role: "user", content: message } ] },
+            { context: { projectId, writer }, streamMode: "values" }
+        );
+        let lastState = null;
+        for await (const chunk of response) {
+            lastState = state;
+        }
+
         for await (const chunk of response) {
             res.write(`data: ${chunk}\n\n`);
         }
+
+        if (lastState?.messages?.length) {
+            const msgs = lastState.messages;
+            for (let i = msgs.length - 1; i >= 0; i--) {
+                const m = msgs[i];
+                const role = m.role ?? m._getType?.();
+                if ((role === 'ai' || role === 'assistant') && !m.tool_calls?.length) {
+                    const content = typeof m.content === 'string' ? m.content : JSON.stringify(m.content);
+                    res.write(content + '\n');
+                    break;
+                }
+            }
+        }
+        
         res.end();                        // was res.json({ response })
     } catch (error) {
         console.error("Error invoking agent:", error);
