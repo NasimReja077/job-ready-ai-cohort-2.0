@@ -25,7 +25,11 @@ export default function App() {
 
   const handleSandboxCreated = useCallback((data) => {
     const agentBase = `/api/sandbox/agent/${encodeURIComponent(data.sandboxId)}`
-    setSandbox({ sandboxId: data.sandboxId, previewUrl: data.previewUrl, agentBase })
+    setSandbox({ 
+      sandboxId: data.sandboxId, 
+      previewUrl: `http://${data.sandboxId}.preview.localhost`,
+      agentBase 
+    })
     setStatus('ready')
   }, [])
 
