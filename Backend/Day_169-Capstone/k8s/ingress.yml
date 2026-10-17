@@ -18,6 +18,9 @@ metadata:
 
     # Name of the cookie used for session affinity
     nginx.ingress.kubernetes.io/session-cookie-name: "route"
+
+    # / Path for which the session cookie is valid
+    nginx.ingress.kubernetes.io/session-cookie-path: "/"
     
   labels:
     app.kubernetes.io/name: codespace-ingress
@@ -60,6 +63,15 @@ spec:
         backend:
           service:
             name: sandbox-service
+            port: 
+              number: 80
+  - http:
+      paths:
+      - pathType: Prefix
+        path: "/api/auth"
+        backend:
+          service:
+            name: auth-service
             port: 
               number: 80
 
