@@ -119,7 +119,9 @@ server.on('upgrade', (req, socket, head) => {
     const agentRoute = getAgentRoute(req.url);
     if (agentRoute) {
         req.url = agentRoute.path;
-        getAgentProxy(agentRoute.sandboxId).upgrade(req, socket, head);
+        wsProxy.ws(req, socket, {
+            target: `http://sandbox-service-${agentRoute.sandboxId}:3000`,
+        }, head).catch(() => socket.destroy());
         return;
     }
 

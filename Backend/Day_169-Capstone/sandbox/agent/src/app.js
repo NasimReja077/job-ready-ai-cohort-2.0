@@ -7,6 +7,8 @@ import { Server } from "socket.io";
 import http from 'http';
 import pty from 'node-pty';
 import os from 'os';
+import cors from 'cors';
+
 
 const WORKING_DIR = '/workspace';
 
@@ -15,6 +17,10 @@ const httpServer = http.createServer(app);
 
 
 app.use(morgan('dev'));
+app.use(cors({
+    methods: [ "GET", "POST", "PATCH", "DELETE" ],
+    origin: "*",
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
