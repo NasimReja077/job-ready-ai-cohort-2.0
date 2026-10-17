@@ -12,32 +12,27 @@ agentRouter.post("/invoke", async (req, res) => {
     }
 
     try {
-        const response = await agent.stream(
-            { messages: [{ role: "user", content: message }] },
-            { context: { projectId }, streamMode: "custom" }
-        );
-
-        // Open the stream only after the agent has started successfully
         res.writeHead(200, {
-            "Content-Type": "text/event-stream",
+            "Content-Type": "text/plain; charset=utf-8",
+            // "Content-Type": "text/event-stream",
             "Cache-Control": "no-cache",
             "Connection": "keep-alive",
-            "X-Accel-Buffering": "no",   // stops nginx buffering SSE
+            "X-Accel-Buffering": "no",
         });
 
-        const writer = (text) => res.write(text);
+        const writer = (text) => {
+            if (!res.writableEnded && !res.destroyed) {
+                res.write(text);
+            }
+        };
 
         const stream = await agent.stream(
-            { messages: [ { role: "user", content: message } ] },
+            { messages: [{ role: "user", content: message }] },
             { context: { projectId, writer }, streamMode: "values" }
         );
         let lastState = null;
-        for await (const chunk of response) {
+        for await (const state of stream) {
             lastState = state;
-        }
-
-        for await (const chunk of response) {
-            res.write(`data: ${chunk}\n\n`);
         }
 
         if (lastState?.messages?.length) {
@@ -47,18 +42,19 @@ agentRouter.post("/invoke", async (req, res) => {
                 const role = m.role ?? m._getType?.();
                 if ((role === 'ai' || role === 'assistant') && !m.tool_calls?.length) {
                     const content = typeof m.content === 'string' ? m.content : JSON.stringify(m.content);
-                    res.write(content + '\n');
+                    writer(content + '\n');
                     break;
                 }
             }
         }
-        
-        res.end();                        // was res.json({ response })
+
+        res.end();
     } catch (error) {
         console.error("Error invoking agent:", error);
         if (res.headersSent) {
-            res.write(`event: error\ndata: ${error.message}\n\n`);
-            res.end();
+            if (!res.writableEnded && !res.destroyed) {
+                res.end(`Error: ${error.message}\n`);
+            }
         } else {
             res.status(500).json({ error: "Failed to invoke agent" });
         }

@@ -38,13 +38,19 @@ export function getSandboxAgentUrl(projectId) {
     return `http://sandbox-service-${sandboxId}:3000`;
 }
 
+function writeToolActivity(config, message) {
+    const writer = config?.context?.writer;
+    if (typeof writer === "function") {
+        writer(message);
+    }
+}
+
 export const listFiles = tool(
-    async ({ }, config) => {
-        const writer = config.context?.writer ?? (() => {});
-        writer?.("Listing files in project directory...\n");
-        const sandboxUrl = getSandboxAgentUrl(config.context?.projectId);
+    async ({}, config) => {
+        writeToolActivity(config, "Listing files in project directory...\n");
+        const sandboxUrl = getSandboxAgentUrl(config?.context?.projectId);
         const response = await axios.get(`${sandboxUrl}/list-files`);
-        writer?.(`Files listed successfully. Files: ${response.data.files.join(",")}\n`);
+        writeToolActivity(config, `Files listed successfully. Files: ${response.data.files.join(",")}\n`);
 
         return JSON.stringify(response.data.files);
     },
@@ -54,15 +60,13 @@ export const listFiles = tool(
         schema: z.object({})
     }
 )
-
 export const readFiles = tool(
     async ({ files = [] }, config) => {
-        const writer = config.context?.writer ?? (() => {});
-        writer?.(`Reading files...${files.join(",")}\n`);
-        const sandboxUrl = getSandboxAgentUrl(config.context?.projectId);
+        writeToolActivity(config, `Reading files...${files.join(",")}\n`);
+        const sandboxUrl = getSandboxAgentUrl(config?.context?.projectId);
         const query = new URLSearchParams({ files: files.join(",") });
         const response = await axios.get(`${sandboxUrl}/read-files?${query}`);
-        writer?.("Files read successfully.\n");
+        writeToolActivity(config, "Files read successfully.\n");
         return JSON.stringify(response.data);
     },
     {
@@ -73,16 +77,14 @@ export const readFiles = tool(
         })
     }
 )
-
 export const updateFiles = tool(
     async ({ files }, config) => {
-        const writer = config.context?.writer ?? (() => {});
-        writer?.(`Updating files...${files.map(f => f.file).join(",")}\n`);
-        const sandboxUrl = getSandboxAgentUrl(config.context?.projectId);
+        writeToolActivity(config, `Updating files...${files.map(f => f.file).join(",")}\n`);
+        const sandboxUrl = getSandboxAgentUrl(config?.context?.projectId);
         const response = await axios.patch(`${sandboxUrl}/update-files`, {
             updates: files
         });
-        writer?.("Files updated successfully.\n");
+        writeToolActivity(config, "Files updated successfully.\n");
         return JSON.stringify(response.data.results);
     },
     {
