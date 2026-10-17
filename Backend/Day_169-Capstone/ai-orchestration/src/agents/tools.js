@@ -40,7 +40,7 @@ export function getSandboxAgentUrl(projectId) {
 
 export const listFiles = tool(
     async ({ }, config) => {
-        const writer = config.writer;
+        const writer = config.context?.writer ?? (() => {});
         writer?.("Listing files in project directory...\n");
         const sandboxUrl = getSandboxAgentUrl(config.context?.projectId);
         const response = await axios.get(`${sandboxUrl}/list-files`);
@@ -57,7 +57,7 @@ export const listFiles = tool(
 
 export const readFiles = tool(
     async ({ files = [] }, config) => {
-        const writer = config.writer;
+        const writer = config.context?.writer ?? (() => {});
         writer?.(`Reading files...${files.join(",")}\n`);
         const sandboxUrl = getSandboxAgentUrl(config.context?.projectId);
         const query = new URLSearchParams({ files: files.join(",") });
@@ -76,7 +76,7 @@ export const readFiles = tool(
 
 export const updateFiles = tool(
     async ({ files }, config) => {
-        const writer = config.writer;
+        const writer = config.context?.writer ?? (() => {});
         writer?.(`Updating files...${files.map(f => f.file).join(",")}\n`);
         const sandboxUrl = getSandboxAgentUrl(config.context?.projectId);
         const response = await axios.patch(`${sandboxUrl}/update-files`, {
