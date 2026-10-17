@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { getAgentRoute, getPreviewRoute } from "../src/agent-route.js";
+import { getAgentRoute, getPreviewHmrRoute, getPreviewRoute } from "../src/agent-route.js";
 
 test("routes sandbox agent HTTP requests to the matching service path", () => {
     assert.deepEqual(
@@ -37,6 +37,17 @@ test("routes preview asset and WebSocket paths to the sandbox root", () => {
             path: "/?token=abc",
         }
     );
+});
+
+test("routes the sandbox-specific Vite HMR socket without rewriting its path", () => {
+    assert.deepEqual(
+        getPreviewHmrRoute("/__vite_hmr/sandbox-123?token=hmr-token"),
+        {
+            sandboxId: "sandbox-123",
+            path: "/__vite_hmr/sandbox-123?token=hmr-token",
+        }
+    );
+    assert.equal(getPreviewHmrRoute("/__vite_hmr/invalid_id"), null);
 });
 
 test("does not match malformed or unrelated paths", () => {
