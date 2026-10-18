@@ -4,6 +4,7 @@ import { createProxyMiddleware } from "http-proxy-middleware";
 import http from 'http';
 import { getAgentRoute, getPreviewHmrRoute, getPreviewRoute } from "./agent-route.js";
 import { createProxyServer } from 'httpxy';
+import { refreshTTL } from './config/redis.js';
 
 const app = express();
 app.use(morgan('combined'));
@@ -75,7 +76,7 @@ wsProxy.on('error', (err, req, socket) => {
 });
 
 
-app.use((req, res, next) => {
+app.use(async(req, res, next) => {
     const host = req.headers.host;
 
     if (!host) {
@@ -88,7 +89,7 @@ app.use((req, res, next) => {
     }
 
     const sandboxId = hostParts[ 0 ]; // Extract sandboxId from subdomain
-
+    await refreshTTL(sandboxId);
     /**
      * pod1.preview.localhost
      * pod1.agent.localhost
