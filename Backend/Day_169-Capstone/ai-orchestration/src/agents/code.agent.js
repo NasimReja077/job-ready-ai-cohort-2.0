@@ -10,7 +10,7 @@ const apiKey = process.env.GOOGLE_API_KEY?.trim();
 if (!apiKey) throw new Error("GOOGLE_API_KEY is not set");
 
 const model = new ChatGoogleGenerativeAI({
-    model: "gemini-3.8-flash",
+    model: "gemini-3.8-flash", // gemini-3-flash-preview
     apiKey: apiKey,
     temperature: 0.4,
     maxRetries: 2,
