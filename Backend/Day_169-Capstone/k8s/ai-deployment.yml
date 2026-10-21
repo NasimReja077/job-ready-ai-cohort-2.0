@@ -16,6 +16,7 @@ spec:
     spec:
       containers:
       - image:  ai-orchestration
+        # image:  329599656829.dkr.ecr.ap-southeast-1.amazonaws.com/ai-orchestration
         imagePullPolicy: IfNotPresent
         name:  ai-server
         resources:

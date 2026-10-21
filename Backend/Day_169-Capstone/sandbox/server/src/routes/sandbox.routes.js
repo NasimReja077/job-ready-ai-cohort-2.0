@@ -50,6 +50,7 @@ router.post("/start", authMiddleware, async (req, res) => {
         message: 'Sandbox environment created successfully',
         sandboxId,
         previewUrl: `http://${sandboxId}.preview.localhost`
+        // previewUrl: `https://${sandboxId}.preview.cryboy.in`
     })
 })
 

@@ -16,6 +16,7 @@ spec:
     spec:
       containers:
       - image:  router
+      #  - image:  329599656829.dkr.ecr.ap-southeast-1.amazonaws.com/router
         imagePullPolicy: IfNotPresent
         name:  router-server
         resources:

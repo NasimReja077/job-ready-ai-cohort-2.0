@@ -25,6 +25,8 @@ export default function App() {
 
   const handleSandboxCreated = useCallback((data) => {
     const agentBase = `/api/sandbox/agent/${encodeURIComponent(data.sandboxId)}`
+    // const agentBase = `http://${data.sandboxId}.agent.localhost`
+    // const agentBase = `https://${data.sandboxId}.agent.cryboy.in`
     setSandbox({ 
       sandboxId: data.sandboxId, 
       previewUrl: `http://${data.sandboxId}.preview.localhost`,
